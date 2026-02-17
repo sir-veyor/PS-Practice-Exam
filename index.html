@@ -1,0 +1,4119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlBTIEV4YW0gTWFzdGVyIiwgInNob3J0X25hbWUiOiAiUFMgUHJlcCIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjRmN2Y5IiwgInRoZW1lX2NvbG9yIjogIiMwMDRhOTkiLCAiaWNvbnMiOiBbeyJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMzQwNy8zNDA3MDI0LnBuZyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn1dfQ==">
+    <title>PS Exam Prep</title>
+    <style>
+        :root { --primary: #004a99; --success: #28a745; --danger: #dc3545; --warning: #fd7e14; --bg: #f4f7f9; }
+        body { font-family: -apple-system, system-ui, sans-serif; background-color: var(--bg); margin: 0; padding: 0; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 600px; background: white; min-height: 100vh; padding: 12px; box-sizing: border-box; display: flex; flex-direction: column; position: relative; }
+        h1 { color: var(--primary); text-align: center; font-size: 1.3rem; margin-top: 5px; margin-bottom: 10px; }
+        .menu-btn { display: block; width: 100%; padding: 14px; margin: 6px 0; font-size: 1rem; cursor: pointer; border: none; border-radius: 10px; background: var(--primary); color: white; font-weight: bold; }
+        .card { border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 12px; background: #fff; position: relative; }
+        .cat-tag { font-size: 0.7rem; background: #eef2f7; padding: 4px 10px; border-radius: 5px; color: #555; font-weight: bold; margin-bottom: 8px; display: inline-block; }
+        .option { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #eee; border-radius: 10px; text-align: left; background: white; font-size: 0.95rem; cursor: pointer; }
+        .option.correct { background: #d4edda !important; border-color: var(--success); color: #155724; font-weight: bold; }
+        .option.incorrect { background: #f8d7da !important; border-color: var(--danger); color: #721c24; }
+        .rationale { background: #fff3cd; padding: 12px; border-radius: 10px; margin-top: 10px; border-left: 5px solid #ffc107; font-size: 0.85rem; }
+        .report-btn { background: #eee; border: 1px solid #ccc; color: #555; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-top: 8px; font-weight: bold; display: inline-block; }
+        .footer-row { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
+        .footer-btn { flex: 1; background: #343a40; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+        .stat-item { padding: 10px; margin: 4px 0; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; border: 1px solid rgba(0,0,0,0.05); }
+        .rank-red { background: #f8d7da; color: #721c24; }
+        .rank-orange { background: #fff3cd; color: #856404; }
+        .rank-green { background: #d4edda; color: #155724; }
+        .progress-bar { width: 100%; background: #e0e0e0; height: 6px; border-radius: 4px; margin-bottom: 10px; }
+        .progress-fill { background: var(--primary); height: 100%; border-radius: 4px; transition: width 0.3s; }
+        .nav-btns { display: flex; gap: 10px; margin-top: auto; padding-top: 10px; }
+        .nav-btns button { flex: 1; padding: 14px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .danger-zone { margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="container" id="app"></div>
+
+<script>
+if ('serviceWorker' in navigator) {
+    const swCode = `
+        const CACHE_NAME = 'ps-v2';
+        self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll([location.href]))); });
+        self.addEventListener('fetch', e => { e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); });
+    `;
+    const blob = new Blob([swCode], {type: 'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(blob));
+}
+
+const fullDatabase = [
+    {
+        "Question": "If a client asks a surveyor to 'move a corner' to help property value, the surveyor should:",
+        "A": "Do it happy",
+        "B": "Refuse and explain obligations",
+        "C": "Charge extra",
+        "D": "Ask the neighbor",
+        "Correct": "B",
+        "Rationale": "A surveyor cannot alter a boundary for personal or client gain.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a surveyor discovers a major error in a previous survey, they should:",
+        "A": "Hide it",
+        "B": "Ignore it",
+        "C": "Report it to the client and board",
+        "D": "Charge extra",
+        "Correct": "C",
+        "Rationale": "Professional ethics require honesty and protection of the public.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a surveyor finds a mistake in their own work, they should:",
+        "A": "Hide it",
+        "B": "Notify the client and correct it",
+        "C": "Charge extra",
+        "D": "Wait for complaint",
+        "Correct": "B",
+        "Rationale": "Professional honesty and duty of care require correction.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a project will cost much more than the estimate, the surveyor should:",
+        "A": "Stop working",
+        "B": "Bill the high amount",
+        "C": "Inform the client immediately",
+        "D": "Use cheaper equipment",
+        "Correct": "C",
+        "Rationale": "Communication about fees is key to professional practice.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'Continuing Education' (PDH/CEU)?",
+        "A": "Driving truck",
+        "B": "Required training to hold a PLS license",
+        "C": "Degree",
+        "D": "Newspaper",
+        "Correct": "A",
+        "Rationale": "Ensures surveyors stay current.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'Direct Labor' cost?",
+        "A": "Paper",
+        "B": "Wages paid to project employees",
+        "C": "Rent",
+        "D": "Marketing",
+        "Correct": "B",
+        "Rationale": "Key component of project costing.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'Professional Liability' insurance?",
+        "A": "Truck insurance",
+        "B": "Covers errors and omissions",
+        "C": "Life insurance",
+        "D": "Health insurance",
+        "Correct": "B",
+        "Rationale": "Protects from claims of negligence.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'QA/QC' in a survey firm?",
+        "A": "Quick Action",
+        "B": "Quality Assurance and Quality Control",
+        "C": "Question/Answer",
+        "D": "Quality Accuracy",
+        "Correct": "B",
+        "Rationale": "Ensures final product meets standards.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is the purpose of a 'Scope of Services' in a contract?",
+        "A": "Education",
+        "B": "Define tasks performed/not performed",
+        "C": "Weather",
+        "D": "Equipment",
+        "Correct": "B",
+        "Rationale": "Prevents scope creep.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is the purpose of 'Redundancy'?",
+        "A": "Waste time",
+        "B": "Detection/elimination of blunders",
+        "C": "Increase cost",
+        "D": "Harder to read",
+        "Correct": "B",
+        "Rationale": "Critical for quality control.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is the purpose of a 'Scope of Services' in a contract?\"",
+        "A": "Education",
+        "B": "Define tasks performed/not performed",
+        "C": "Weather",
+        "D": "Equipment",
+        "Correct": "B",
+        "Rationale": "Prevents scope creep.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is the purpose of 'Redundancy'?\"",
+        "A": "Waste time",
+        "B": "Detection/elimination of blunders",
+        "C": "Increase cost",
+        "D": "Harder to read",
+        "Correct": "B",
+        "Rationale": "Critical for quality control.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Contract' for survey services should include:\"",
+        "A": "The scope of work fee and timeline",
+        "B": "Only the price",
+        "C": "A list of the surveyor's hobbies",
+        "D": "Nothing in writing",
+        "Correct": "A",
+        "Rationale": "A clear written contract protects both the surveyor and the client.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Lien' placed on a property by a surveyor for unpaid fees is known as a:\"",
+        "A": "Professional Lien",
+        "B": "Mechanic's Lien",
+        "C": "Judicial Lien",
+        "D": "Tax Lien",
+        "Correct": "B",
+        "Rationale": "In many states, surveyors are entitled to file a mechanic's lien (or similar professional lien) against the property they surveyed. [cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Notice to Proceed' is important in a surveying contract because it:\"",
+        "A": "Establishes the date the field crew gets paid",
+        "B": "Provides formal authorization to begin work and incur costs",
+        "C": "Is required by the NCEES",
+        "D": "Is used to find the property corners",
+        "Correct": "B",
+        "Rationale": "It protects the surveyor from performing 'unauthorized' work that the client may later refuse to pay for.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Retainer' is:\"",
+        "A": "A type of fence",
+        "B": "An up-front payment for services",
+        "C": "A tool for holding stakes",
+        "D": "A permanent monument",
+        "Correct": "B",
+        "Rationale": "Retainers help manage cash flow and client commitment.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Standard of Care' for a surveyor is defined as:\"",
+        "A": "The maximum accuracy possible with modern tools",
+        "B": "The level of service provided by a 'reasonably prudent' surveyor in the same area and time",
+        "C": "The requirements found in the NCEES handbook",
+        "D": "Whatever the client is willing to pay for",
+        "Correct": "B",
+        "Rationale": "Standard of care is a legal concept used to judge negligence based on local professional norms.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor discovers a 0.5-foot error in a survey they signed 5 years ago. The owner is building a wall. What is the first step?\"",
+        "A": "Say nothing and hope they don't notice",
+        "B": "Notify the client and current owner of the error immediately",
+        "C": "Call their insurance company and wait for a claim",
+        "D": "Try to fix the wall at night",
+        "Correct": "B",
+        "Rationale": "Ethics and the standard of care require immediate disclosure of errors that could cause harm.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor who signs a map prepared by someone else without 'responsible charge' is:\"",
+        "A": "A team player",
+        "B": "Committing 'Plan Stamping' (an ethical/legal violation)",
+        "C": "Saving time",
+        "D": "Being efficient",
+        "Correct": "B",
+        "Rationale": "The licensee must have direct supervision and control over the work they seal.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's 'Duty of Care' is defined by:\"",
+        "A": "What the client wants",
+        "B": "What a reasonable and prudent surveyor would do",
+        "C": "The lowest possible price",
+        "D": "The fastest GPS speed",
+        "Correct": "B",
+        "Rationale": "This is the standard used in professional liability (negligence) cases.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's primary duty is to protect:\"",
+        "A": "The client's bank account",
+        "B": "The public",
+        "C": "The other surveyors in the area",
+        "D": "The local government",
+        "Correct": "B",
+        "Rationale": "Professional licensure is granted to ensure the safety and welfare of the public.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's 'Seal' (or Stamp) on a plat indicates:\"",
+        "A": "The property is for sale",
+        "B": "The document was prepared by or under the direct supervision of a licensed professional",
+        "C": "The surveyor owns the land",
+        "D": "The survey is 100% free of any error",
+        "Correct": "B",
+        "Rationale": "The seal is the surveyor's mark of professional responsibility.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "Ethics' in surveying primarily serves to protect:\"",
+        "A": "The surveyor's profit",
+        "B": "The client only",
+        "C": "The health safety and welfare of the public",
+        "D": "The government",
+        "Correct": "C",
+        "Rationale": "The public's interest is the primary duty of a professional.[cite: 1]",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The 'Lien' period for a surveyor usually begins:",
+        "A": "When the contract is signed",
+        "B": "When the work is completed or the plat is filed",
+        "C": "When the bill is sent",
+        "D": "When the client moves in",
+        "Correct": "B",
+        "Rationale": "Statutes vary by state but generally follow the completion of services.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The 'Privity of Contract' means a surveyor is generally liable to:",
+        "A": "The whole world",
+        "B": "Only the party they have a contract with",
+        "C": "Only the government",
+        "D": "The neighbors",
+        "Correct": "B",
+        "Rationale": "This is a traditional legal defense against third-party claims.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'Tort Law' as it relates to surveying?",
+        "A": "The law of contracts",
+        "B": "Liability for negligence or professional errors",
+        "C": "Criminal law",
+        "D": "Tax law",
+        "Correct": "B",
+        "Rationale": "Surveyors can be sued in tort for failing to meet the standard of care.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "Who is responsible for the accuracy of a survey?",
+        "A": "The field crew",
+        "B": "The client",
+        "C": "The licensed surveyor who seals it",
+        "D": "The CAD tech",
+        "Correct": "C",
+        "Rationale": "The licensee holds 'Responsible Charge' for the work.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "What is 'Responsible Charge'?",
+        "A": "Paying the bill",
+        "B": "Direct control and personal supervision of surveying work",
+        "C": "Being the oldest employee",
+        "D": "Driving the truck",
+        "Correct": "B",
+        "Rationale": "The legal requirement for a professional to sign/seal work.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "An 'Ethics' violation should be reported to:",
+        "A": "The Police",
+        "B": "The State Board of Registration",
+        "C": "The client",
+        "D": "The newspaper",
+        "Correct": "B",
+        "Rationale": "The Board regulates the profession and handles disciplinary actions.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Conflict of Interest' occurs when a surveyor:",
+        "A": "Works too many hours",
+        "B": "Has a financial interest that could influence their professional judgment",
+        "C": "Surveyors two different houses",
+        "D": "Has two different computers",
+        "Correct": "B",
+        "Rationale": "Ethics require avoiding or disclosing such conflicts to the client.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Lien' gives a surveyor the right to:",
+        "A": "Sell the neighbor's house",
+        "B": "Secure payment for services by claiming an interest in the property",
+        "C": "Arrest a client",
+        "D": "Move a corner",
+        "Correct": "B",
+        "Rationale": "It is a legal tool to ensure professionals get paid for their work.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The 'Statute of Repose' differs from 'Statute of Limitations' because it:",
+        "A": "Is shorter",
+        "B": "Sets an absolute deadline for filing a claim regardless of when the error was found",
+        "C": "Is only for crimes",
+        "D": "Is for surveyors only",
+        "Correct": "B",
+        "Rationale": "It protects professionals from 'infinite' liability for old work.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a client demands you show something on a map that is not true you should:",
+        "A": "Do it anyway",
+        "B": "Refuse and maintain professional integrity",
+        "C": "Charge them double",
+        "D": "Ask the neighbor",
+        "Correct": "B",
+        "Rationale": "A surveyor's first duty is to the truth and the public.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "Which is a 'Business Practice' task?",
+        "A": "Calculating a curve",
+        "B": "Setting a property corner",
+        "C": "Preparing a project budget and contract",
+        "D": "Drawing contours",
+        "Correct": "C",
+        "Rationale": "Business practices involve the management and ethical side of the profession.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The NCEES PS Exam is for:",
+        "A": "Surveying students",
+        "B": "Professional Surveyors (Licensure)",
+        "C": "Doctors",
+        "D": "Pilots",
+        "Correct": "B",
+        "Rationale": "It is the national exam for professional surveying licensure.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The 'Standard of Care' is determined by:",
+        "A": "The NCEES",
+        "B": "What a 'reasonably prudent surveyor' would do in similar circumstances",
+        "C": "The client",
+        "D": "The price",
+        "Correct": "B",
+        "Rationale": "It is the legal benchmark for professional negligence.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Professional Surveyor' must be:",
+        "A": "Strong",
+        "B": "Licensed by the State",
+        "C": "A good driver",
+        "D": "Rich",
+        "Correct": "B",
+        "Rationale": "Licensure is required to practice surveying for the public.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Scope of Work' defines:",
+        "A": "The surveyor's favorite tools",
+        "B": "What tasks will be performed for the client",
+        "C": "The neighbor's name",
+        "D": "The weather",
+        "Correct": "B",
+        "Rationale": "A clear scope prevents misunderstandings and 'scope creep'.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a surveyor finds a mistake they should:",
+        "A": "Hide it",
+        "B": "Correct it and notify the client",
+        "C": "Charge more",
+        "D": "Blame the crew",
+        "Correct": "B",
+        "Rationale": "Professional ethics require honesty and taking responsibility.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "The 'NCEES' provides:",
+        "A": "Surveying equipment",
+        "B": "National standardized exams for licensure",
+        "C": "Insurance",
+        "D": "Legal advice",
+        "Correct": "B",
+        "Rationale": "They maintain the FS and PS exams used by state boards.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Lien' placed on a property by a surveyor for unpaid fees is known as a:",
+        "A": "Professional Lien",
+        "B": "Mechanic's Lien",
+        "C": "Judicial Lien",
+        "D": "Tax Lien",
+        "Correct": "B",
+        "Rationale": "In many states, surveyors are entitled to file a mechanic's lien (or similar professional lien) against the property they surveyed.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Notice to Proceed' is important in a surveying contract because it:",
+        "A": "Establishes the date the field crew gets paid",
+        "B": "Provides formal authorization to begin work and incur costs",
+        "C": "Is required by the NCEES",
+        "D": "Is used to find the property corners",
+        "Correct": "B",
+        "Rationale": "It protects the surveyor from performing 'unauthorized' work that the client may later refuse to pay for.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Retainer' is:",
+        "A": "A type of fence",
+        "B": "An up-front payment for services",
+        "C": "A tool for holding stakes",
+        "D": "A permanent monument",
+        "Correct": "B",
+        "Rationale": "Retainers help manage cash flow and client commitment.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A 'Standard of Care' for a surveyor is defined as:",
+        "A": "The maximum accuracy possible with modern tools",
+        "B": "The level of service provided by a 'reasonably prudent' surveyor in the same area and time",
+        "C": "The requirements found in the NCEES handbook",
+        "D": "Whatever the client is willing to pay for",
+        "Correct": "B",
+        "Rationale": "Standard of care is a legal concept used to judge negligence based on local professional norms.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor discovers a 0.5-foot error in a survey they signed 5 years ago. The owner is building a wall. What is the first step?",
+        "A": "Say nothing and hope they don't notice",
+        "B": "Notify the client and current owner of the error immediately",
+        "C": "Call their insurance company and wait for a claim",
+        "D": "Try to fix the wall at night",
+        "Correct": "B",
+        "Rationale": "Ethics and the standard of care require immediate disclosure of errors that could cause harm.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor who signs a map prepared by someone else without 'responsible charge' is:",
+        "A": "A team player",
+        "B": "Committing 'Plan Stamping' (an ethical/legal violation)",
+        "C": "Saving time",
+        "D": "Being efficient",
+        "Correct": "B",
+        "Rationale": "The licensee must have direct supervision and control over the work they seal.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's 'Duty of Care' is defined by:",
+        "A": "What the client wants",
+        "B": "What a reasonable and prudent surveyor would do",
+        "C": "The lowest possible price",
+        "D": "The fastest GPS speed",
+        "Correct": "B",
+        "Rationale": "This is the standard used in professional liability (negligence) cases.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's primary duty is to protect:",
+        "A": "The client's bank account",
+        "B": "The public",
+        "C": "The other surveyors in the area",
+        "D": "The local government",
+        "Correct": "B",
+        "Rationale": "Professional licensure is granted to ensure the safety and welfare of the public.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "A surveyor's 'Seal' (or Stamp) on a plat indicates:",
+        "A": "The property is for sale",
+        "B": "The document was prepared by or under the direct supervision of a licensed professional",
+        "C": "The surveyor owns the land",
+        "D": "The survey is 100% free of any error",
+        "Correct": "B",
+        "Rationale": "The seal is the surveyor's mark of professional responsibility.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "'Ethics' in surveying primarily serves to protect:",
+        "A": "The surveyor's profit",
+        "B": "The client only",
+        "C": "The health safety and welfare of the public",
+        "D": "The government",
+        "Correct": "C",
+        "Rationale": "The public's interest is the primary duty of a professional.",
+        "Category": "Business Practices"
+    },
+    {
+        "Question": "If a property is 'Landlocked', the owner may seek a/an:",
+        "A": "Prescriptive Easement",
+        "B": "Easement by Necessity",
+        "C": "License to Trespass",
+        "D": "Adverse Possession claim",
+        "Correct": "B",
+        "Rationale": "Courts may grant this if a parcel has no legal access to a road.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "If a sudden flood causes a river to cut a new channel, this rapid change is called:",
+        "A": "Accretion",
+        "B": "Reliction",
+        "C": "Avulsion",
+        "D": "Erosion",
+        "Correct": "C",
+        "Rationale": "Avulsion is sudden and generally does not change the legal boundary.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "If a surveyor finds a 'Gap' (Hiatus) between two properties, who owns it?",
+        "A": "The neighbor East",
+        "B": "The neighbor West",
+        "C": "The original grantor or heirs",
+        "D": "The city",
+        "Correct": "C",
+        "Rationale": "If a grantor failed to convey a strip title remains with them.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In a 'Race-Notice' state, who has the best title?",
+        "A": "Oldest deed",
+        "B": "The person who records first without notice",
+        "C": "The resident",
+        "D": "The highest payer",
+        "Correct": "B",
+        "Rationale": "The race to the recorder's office determines priority.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Surveying a boundary on a 'Great Lake', the boundary is usually the:",
+        "A": "OHWM",
+        "B": "Low Water Mark",
+        "C": "Center",
+        "D": "Vegetation line",
+        "Correct": "B",
+        "Rationale": "Most laws hold the OHWM as the limit of private ownership on Great Lakes.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Surveying a 'Sequential Conveyance' subdivision and finding a shortage, who loses land?",
+        "A": "First lot sold",
+        "B": "Last lot sold (remainder)",
+        "C": "All share equally",
+        "D": "The city",
+        "Correct": "B",
+        "Rationale": "Senior rights are fulfilled first; the junior lot takes what is left.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In a boundary dispute, when is 'Parol Evidence' generally admissible?",
+        "A": "To contradict a deed",
+        "B": "To explain a latent ambiguity",
+        "C": "To change zoning",
+        "D": "To prove surveyor wrong",
+        "Correct": "B",
+        "Rationale": "Oral evidence is allowed to clarify ambiguities not obvious on the face.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In a 'Sequential Conveyance', who has 'Senior Rights'?",
+        "A": "First grantee",
+        "B": "Last grantee",
+        "C": "Largest lot",
+        "D": "Highest payer",
+        "Correct": "A",
+        "Rationale": "Seniority is determined by the order of creation.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In a 'Simultaneous Conveyance', how are overlaps/gaps handled?",
+        "A": "First lot priority",
+        "B": "Last lot priority",
+        "C": "Proportioned among all",
+        "D": "City takes excess",
+        "Correct": "C",
+        "Rationale": "All lots share priority and measurement errors are distributed.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In an 'Ambiguous Deed', which is least reliable evidence of intent?",
+        "A": "Senior adjoiner",
+        "B": "Natural creek",
+        "C": "Specific acreage",
+        "D": "1/2-inch iron pipe",
+        "Correct": "C",
+        "Rationale": "Area is consistently ranked as the lowest-priority call.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In most jurisdictions, private ownership limit on non-navigable stream?",
+        "A": "Water's edge",
+        "B": "OHWM",
+        "C": "Thread (center)",
+        "D": "Top of bank",
+        "Correct": "C",
+        "Rationale": "Owners of land bordering non-navigable streams own to the center.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In PLSS, a 'Meander Corner' is established at:",
+        "A": "Center of section",
+        "B": "Intersection with navigable water",
+        "C": "Township corner",
+        "D": "Quarter corner",
+        "Correct": "B",
+        "Rationale": "Placed where lines meet permanent water bodies.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In PLSS, what is 'Proportionate Measurement' used for?",
+        "A": "Subdivide section",
+        "B": "Restore a lost corner",
+        "C": "Measure building",
+        "D": "Calculate area",
+        "Correct": "B",
+        "Rationale": "Maintains relative positions of original corners based on record vs measured.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Accretion'?",
+        "A": "Loss of land",
+        "B": "Gradual addition of land by water",
+        "C": "Soil type",
+        "D": "Legal fee",
+        "Correct": "B",
+        "Rationale": "Owner gains title to new soil (alluvium).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is an 'Adjoiner'?",
+        "A": "Assistant",
+        "B": "Neighboring property/owner",
+        "C": "Rod",
+        "D": "Software",
+        "Correct": "B",
+        "Rationale": "Properties sharing a boundary with subject tract.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Avulsion'?",
+        "A": "Soil buildup",
+        "B": "Sudden change in river course",
+        "C": "Fence movement",
+        "D": "Erosion",
+        "Correct": "B",
+        "Rationale": "Generally does not change legal boundary.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Color of Title'?",
+        "A": "Paper color",
+        "B": "Instrument appearing to convey title but does not",
+        "C": "Clear title",
+        "D": "Verbal",
+        "Correct": "B",
+        "Rationale": "Requirement for shortened adverse possession.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Erosion'?",
+        "A": "Buildup",
+        "B": "Gradual wearing away by water/wind",
+        "C": "Rock",
+        "D": "Moving monument",
+        "Correct": "B",
+        "Rationale": "Can result in loss of land and boundary change.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Escheat'?",
+        "A": "Reversion to state (no heirs)",
+        "B": "Dispute",
+        "C": "Subdivision",
+        "D": "Error",
+        "Correct": "A",
+        "Rationale": "Sovereign right.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Inverse Condemnation'?",
+        "A": "Gov suing owner",
+        "B": "Owner suing gov for taking land without pay",
+        "C": "Easement",
+        "D": "Building condemnation",
+        "Correct": "B",
+        "Rationale": "Reverse of Eminent Domain.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Parol Evidence'?",
+        "A": "Field notes",
+        "B": "Recorded plat",
+        "C": "Oral testimony for ambiguity",
+        "D": "Certified deed",
+        "Correct": "C",
+        "Rationale": "Extrinsic evidence used when deed is not clear.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Reliction'?",
+        "A": "Sudden loss",
+        "B": "Gradual recession of water exposing dry land",
+        "C": "Buildup",
+        "D": "Cliff erosion",
+        "Correct": "B",
+        "Rationale": "Exposed land usually belongs to riparian owner.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Riparian Rights'?",
+        "A": "Road land",
+        "B": "Land bordering river/stream",
+        "C": "Mineral",
+        "D": "Fly over",
+        "Correct": "B",
+        "Rationale": "Rights to use of water and land beneath.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is an 'Incorporeal Hereditament'?",
+        "A": "Fence",
+        "B": "Intangible right that runs with land",
+        "C": "Soil",
+        "D": "Missing monument",
+        "Correct": "B",
+        "Rationale": "Right like an easement that is inheritable.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Difference between 'Riparian' and 'Littoral' rights?",
+        "A": "Riparian=rivers Littoral=lakes",
+        "B": "Riparian=lakes Littoral=rivers",
+        "C": "Same",
+        "D": "Desert",
+        "Correct": "A",
+        "Rationale": "Moving water vs standing water.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Hierarchy of Calls' used for?",
+        "A": "Phone tree",
+        "B": "Resolving discrepancies in deed descriptions",
+        "C": "Sorting mail",
+        "D": "Taxes",
+        "Correct": "B",
+        "Rationale": "Determines which evidence is most reliable.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Meander Line'?",
+        "A": "Define boundary",
+        "B": "Calculate area",
+        "C": "Set corner",
+        "D": "Establish township",
+        "Correct": "B",
+        "Rationale": "Approximate area of a sinuous bank.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Call for Adjoiner' is often given:\"",
+        "A": "Higher priority than a bearing",
+        "B": "Lower priority than area",
+        "C": "To identify the neighbor's dog",
+        "D": "Only in cities",
+        "Correct": "A",
+        "Rationale": "Calling for a known boundary of another tract is a high-priority call because it indicates intent to go to that line.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Closing Corner' in the PLSS is used when:\"",
+        "A": "A survey is finished",
+        "B": "A line intersects a previously established boundary",
+        "C": "A corner is lost",
+        "D": "A new township is created",
+        "Correct": "B",
+        "Rationale": "Closing corners are established where new lines meet \"senior\" lines (standard parallels or township boundaries). [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Cloud on Title' is:\"",
+        "A": "A weather event",
+        "B": "A potential claim that may invalidate a title",
+        "C": "A smoke signal",
+        "D": "A missing corner monument",
+        "Correct": "B",
+        "Rationale": "Clouds must be cleared (usually by a quiet title action or quitclaim deed).[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' is effective when it is:\"",
+        "A": "Signed",
+        "B": "Notarized",
+        "C": "Delivered and Accepted",
+        "D": "Recorded",
+        "Correct": "C",
+        "Rationale": "Delivery and acceptance are the final legal steps for a valid conveyance.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' must be ________ to provide constructive notice.\"",
+        "A": "Signed",
+        "B": "Notarized",
+        "C": "Recorded",
+        "D": "Written in blue ink",
+        "Correct": "C",
+        "Rationale": "Recording the deed in public records provides \"constructive notice\" to the world of the claim. [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed of Trust' is primarily used for:\"",
+        "A": "Conveying ownership",
+        "B": "Securing a loan",
+        "C": "Granting an easement",
+        "D": "Establishing a trust fund",
+        "Correct": "B",
+        "Rationale": "A Deed of Trust is a security instrument for a mortgage used in many states.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed Restriction' (Covenant) that 'Runs with the Land' means:\"",
+        "A": "It only applies to the current owner",
+        "B": "It applies to all future owners of the property",
+        "C": "It is only for the surveyor",
+        "D": "It expires when the house is sold",
+        "Correct": "B",
+        "Rationale": "Covenants that 'run with the land' are binding on all subsequent owners.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' that is not 'Recorded' is:\"",
+        "A": "Void",
+        "B": "Valid between the parties but may not protect against third-party claims",
+        "C": "A crime",
+        "D": "The surveyor's fault",
+        "Correct": "B",
+        "Rationale": "Recording provides 'Constructive Notice' to the rest of the world.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Fee Simple' estate represents:\"",
+        "A": "A temporary rental",
+        "B": "The most complete form of ownership of real property",
+        "C": "A right of way for a road",
+        "D": "A life estate",
+        "Correct": "B",
+        "Rationale": "Fee simple absolute is the highest interest in land known to the law.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'General Warranty Deed' protects the buyer from:\"",
+        "A": "Claims arising only during the grantor's ownership",
+        "B": "All claims against the title, regardless of when they arose",
+        "C": "Boundary encroachments only",
+        "D": "Zoning changes",
+        "Correct": "B",
+        "Rationale": "It provides the most comprehensive protection.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Latent Ambiguity' in a deed is one that:\"",
+        "A": "Is obvious on the face of the document",
+        "B": "Appears only when applying the deed to the ground",
+        "C": "Cannot be corrected",
+        "D": "Relates to spelling errors",
+        "Correct": "B",
+        "Rationale": "Latent ambiguities require outside evidence (testimony/fieldwork) to resolve.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'License' to use land is:\"",
+        "A": "A permanent right",
+        "B": "A revocable permission for a specific purpose",
+        "C": "A deed",
+        "D": "A mortgage",
+        "Correct": "B",
+        "Rationale": "Unlike an easement, a license can usually be taken away at any time by the owner. [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Life Estate' lasts for:\"",
+        "A": "99 years",
+        "B": "The duration of a person's life",
+        "C": "Until the land is sold",
+        "D": "Forever",
+        "Correct": "B",
+        "Rationale": "The property reverts to another (remainder) after the life tenant dies.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Lost Corner' must be re-established by:\"",
+        "A": "Testimony",
+        "B": "Proportionate measurement",
+        "C": "Random guessing",
+        "D": "Holding the nearest fence",
+        "Correct": "B",
+        "Rationale": "Proportionality is the mathematical method for restoring lost corners in the PLSS.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Monument of Abandonment' is:\"",
+        "A": "A monument that is no longer used",
+        "B": "A monument found in a forest",
+        "C": "A monument that has been destroyed",
+        "D": "There is no such legal term",
+        "Correct": "D",
+        "Rationale": "Monuments can be 'lost' or 'obliterated', but 'abandonment' is not a standard term for a monument. [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Monument of Record' is:\"",
+        "A": "A monument mentioned in a deed or plat",
+        "B": "A very famous monument",
+        "C": "A monument made of gold",
+        "D": "A monument set by the city",
+        "Correct": "A",
+        "Rationale": "Record monuments are those that have legal standing through documentation.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Paralellogram' section in the PLSS is most likely caused by:\"",
+        "A": "Meridian convergence",
+        "B": "Errors in the original survey",
+        "C": "The earth's rotation",
+        "D": "A very large mountain",
+        "Correct": "B",
+        "Rationale": "While convergence causes narrowing extreme shapes are usually the result of historical survey discrepancies.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Partition' is a legal action to:\"",
+        "A": "Build a fence",
+        "B": "Divide property among co-owners",
+        "C": "Survey a road",
+        "D": "Combine two lots",
+        "Correct": "B",
+        "Rationale": "Partition can be \"in kind\" (physical division) or \"by sale\" (splitting proceeds). [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Prescriptive Easement' is created by:\"",
+        "A": "A written agreement",
+        "B": "Long-term use without the owner's permission",
+        "C": "A city ordinance",
+        "D": "A mortgage document",
+        "Correct": "B",
+        "Rationale": "Prescription is similar to adverse possession but grants a right of use rather than ownership.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Quitclaim Deed' does which of the following?\"",
+        "A": "Guarantees the title is clear",
+        "B": "Warrants against all future claims",
+        "C": "Conveys only the interest the grantor currently holds",
+        "D": "Transfers land only to family members",
+        "Correct": "C",
+        "Rationale": "A quitclaim deed makes no warranties about the quality of the title.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Sequential Conveyance' is best described as:\"",
+        "A": "A subdivision plat",
+        "B": "A deed created at a different time than a neighbor",
+        "C": "A will",
+        "D": "A mortgage",
+        "Correct": "B",
+        "Rationale": "Sequential conveyances involve a junior/senior relationship based on the time of creation.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Title Commitment' is a document that:\"",
+        "A": "Guarantees a survey is correct",
+        "B": "States the conditions under which a title company will issue insurance",
+        "C": "Is signed by the surveyor",
+        "D": "Is used to calculate area",
+        "Correct": "B",
+        "Rationale": "It lists current ownership, liens, and easements (exceptions). [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Warranty Deed' guarantees:\"",
+        "A": "That the surveyor was correct",
+        "B": "That the grantor has clear title and will defend it",
+        "C": "That the land is fertile",
+        "D": "That no one will ever trespass",
+        "Correct": "B",
+        "Rationale": "Warranty deeds offer the highest level of protection to the buyer.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Warranty Deed' provides 'Covenants of Title.' [cite_start]Which is NOT standard?",
+        "A": "Covenant of Seisin",
+        "B": "Covenant against encumbrances",
+        "C": "Covenant of quiet enjoyment",
+        "D": "Covenant of high accuracy",
+        "Correct": "D",
+        "Rationale": "Covenants of title are legal guarantees about ownership, not technical precision. [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Accretion' is the opposite of:",
+        "A": "Reliction",
+        "B": "Erosion",
+        "C": "Avulsion",
+        "D": "Conveyance",
+        "Correct": "B",
+        "Rationale": "Erosion is the gradual loss of land; [cite_start]Accretion is the gradual gain.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Actual Notice' means:\"",
+        "A": "The deed is in the courthouse",
+        "B": "The person has direct knowledge of a fact",
+        "C": "The survey is finished",
+        "D": "The owner paid the bill",
+        "Correct": "B",
+        "Rationale": "Actual notice is first-hand knowledge (e.g. seeing a fence).[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Avulsion' is defined as:\"",
+        "A": "Slow soil buildup",
+        "B": "A sudden change in a channel",
+        "C": "The loss of a corner monument",
+        "D": "A vertical shift",
+        "Correct": "B",
+        "Rationale": "Avulsion is a rapid change that typically does not change the boundary.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Easement Appurtenant' is said to:\"",
+        "A": "Expire when the owner dies",
+        "B": "Benefit a 'dominant' estate and burden a 'servient' estate",
+        "C": "Be only for personal use",
+        "D": "Be illegal in the PLSS",
+        "Correct": "B",
+        "Rationale": "These easements 'run with the land' and transfer with the title.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An easement created by open and notorious use for a statutory period is:\"",
+        "A": "Easement by Necessity",
+        "B": "Prescriptive Easement",
+        "C": "Express Easement",
+        "D": "Appurtenant Easement",
+        "Correct": "B",
+        "Rationale": "Prescriptive easements are gained through continuous use without permission.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Easement in Gross' is attached to:\"",
+        "A": "A specific parcel of land",
+        "B": "A specific person or entity",
+        "C": "The neighbor's property",
+        "D": "The city",
+        "Correct": "B",
+        "Rationale": "Unlike appurtenant easements, these are personal rights and do not run with the land. [cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Encroachment' is defined as:\"",
+        "A": "A legal right to use land",
+        "B": "A trespass by a physical structure over a property line",
+        "C": "A shared driveway",
+        "D": "A type of water boundary",
+        "Correct": "B",
+        "Rationale": "Encroachments are physical objects that cross a boundary.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Color of Title' refers to:\"",
+        "A": "A map's legend",
+        "B": "A document that appears to convey title but is legally defective",
+        "C": "The paint on a monument",
+        "D": "A soil type",
+        "Correct": "B",
+        "Rationale": "Color of title is often required for shortened adverse possession.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Does a 'Meander Line' generally fix the property boundary?\"",
+        "A": "Yes always",
+        "B": "No the water body is usually the boundary",
+        "C": "Only in Texas",
+        "D": "Only for lakes",
+        "Correct": "B",
+        "Rationale": "Meander lines are for area calculation; the boundary moves with the water.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Double Proportion' is used to restore:\"",
+        "A": "Quarter corners",
+        "B": "Section corners",
+        "C": "Township corners",
+        "D": "Meander corners",
+        "Correct": "B",
+        "Rationale": "Double proportion is used for interior section corners controlling 4 directions.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Eminent Domain' is the power of the government to:\"",
+        "A": "Collect property taxes",
+        "B": "Take private land for public use with compensation",
+        "C": "Arrest trespassers",
+        "D": "Change zoning laws",
+        "Correct": "B",
+        "Rationale": "This power is limited by the 5th Amendment.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Equitable Estoppel' can be used to:\"",
+        "A": "Stop a neighbor from building a fence",
+        "B": "Prevent a person from asserting a right due to their past actions",
+        "C": "Calculate a boundary bearing",
+        "D": "Force a sale of land",
+        "Correct": "B",
+        "Rationale": "Estoppel prevents someone from speaking against their previous representations.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Fee Simple Absolute' is:\"",
+        "A": "A survey fee",
+        "B": "The highest form of property ownership",
+        "C": "A type of easement",
+        "D": "A rental agreement",
+        "Correct": "B",
+        "Rationale": "It represents complete ownership with no restrictions.[cite: 1]",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "How many sections are in a standard Township?",
+        "A": "12",
+        "B": "24",
+        "C": "36",
+        "D": "48",
+        "Correct": "C",
+        "Rationale": "A township is 6 miles by 6 miles containing 36 one-mile square sections.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "If a deed describes a line as 'North 100 feet to a stone' but the stone is 105 feet away, what do you hold?",
+        "A": "The 100 feet",
+        "B": "The stone (105 feet)",
+        "C": "The average",
+        "D": "Split the difference",
+        "Correct": "B",
+        "Rationale": "A call for a natural or artificial monument controls over distance.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "If a property is bounded by a 'Non-navigable' stream, the owner usually owns to:",
+        "A": "The high water mark",
+        "B": "The thread of the stream (center)",
+        "C": "The edge of the water",
+        "D": "The top of the bank",
+        "Correct": "B",
+        "Rationale": "Riparian rights for non-navigable waters typically extend to the center.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In a PLSS section, which corner is usually set last by the original surveyor?",
+        "A": "The Northeast corner",
+        "B": "The Center quarter corner",
+        "C": "The Section corner",
+        "D": "The Meander corner",
+        "Correct": "B",
+        "Rationale": "Center quarter corners were often not set in the original field work.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In the 'Hierarchy of Calls', which has the lowest priority?",
+        "A": "Natural monuments",
+        "B": "Artificial monuments",
+        "C": "Acreage (Area)",
+        "D": "Distances",
+        "Correct": "C",
+        "Rationale": "Area is considered the least reliable element of a description.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In the PLSS, the 'Initial Point' is the intersection of:",
+        "A": "North and South",
+        "B": "Principal Meridian and Base Line",
+        "C": "State lines",
+        "D": "Two fences",
+        "Correct": "B",
+        "Rationale": "This point is the origin for the rectangular survey system in a region.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "The 'Ordinary High Water Mark' (OHWM) is defined by:",
+        "A": "The highest a flood ever reached",
+        "B": "Physical marks on the bank and vegetation changes",
+        "C": "The center of the river",
+        "D": "The property line",
+        "Correct": "B",
+        "Rationale": "The OHWM is the legal limit of sovereign land in many states.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "The power of a government to regulate land use (Zoning) is based on:",
+        "A": "Eminent Domain",
+        "B": "Police Power",
+        "C": "Escheat",
+        "D": "Adverse Possession",
+        "Correct": "B",
+        "Rationale": "Police power allows regulation for public health safety and welfare.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is a 'Deed Exception'?",
+        "A": "An error in the deed",
+        "B": "A portion of the land not being conveyed",
+        "C": "A special fee",
+        "D": "A missing signature",
+        "Correct": "B",
+        "Rationale": "An exception 'withdraws' a part of the described land from the grant.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is an 'Easement'?",
+        "A": "Ownership of land",
+        "B": "The right to use another's land for a specific purpose",
+        "C": "A type of fence",
+        "D": "A property tax",
+        "Correct": "B",
+        "Rationale": "Easements are non-possessory interests in land.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is 'Junior/Senior Rights' used for?",
+        "A": "Retirement planning",
+        "B": "Resolving boundary overlaps between deeds created at different times",
+        "C": "Ranking employees",
+        "D": "Deciding who pays for the survey",
+        "Correct": "B",
+        "Rationale": "The older (Senior) deed is typically fulfilled first.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "What is the primary goal of an 'Adverse Possession' claim?",
+        "A": "To steal land",
+        "B": "To resolve long-standing discrepancies between possession and record title",
+        "C": "To lower taxes",
+        "D": "To build a fence",
+        "Correct": "B",
+        "Rationale": "It rewards the productive use of land and settles ancient title issues.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Which document is 'Senior' in a simultaneous conveyance (subdivision)?",
+        "A": "Lot 1",
+        "B": "Lot 10",
+        "C": "The last lot",
+        "D": "All lots are equal in seniority",
+        "Correct": "D",
+        "Rationale": "Because they were created at the same time by the same instrument.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Which of the following is NOT a requirement for Adverse Possession?",
+        "A": "Open and Notorious",
+        "B": "Continuous",
+        "C": "Secretive",
+        "D": "Hostile",
+        "Correct": "C",
+        "Rationale": "Adverse possession must be 'open' so the owner can see the trespass.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Township' is approximately ____ miles square.",
+        "A": "1",
+        "B": "6",
+        "C": "24",
+        "D": "36",
+        "Correct": "B",
+        "Rationale": "A township contains 36 square miles.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Section 1 is located in which corner of a Township?",
+        "A": "Northwest",
+        "B": "Northeast",
+        "C": "Southwest",
+        "D": "Southeast",
+        "Correct": "B",
+        "Rationale": "PLSS sections are numbered starting in the NE corner moving West.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Section 36 is located in which corner of a Township?",
+        "A": "Northwest",
+        "B": "Northeast",
+        "C": "Southwest",
+        "D": "Southeast",
+        "Correct": "D",
+        "Rationale": "Section 36 is always the bottom-right corner of the township.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Boundary' is defined as:",
+        "A": "A fence",
+        "B": "A line that separates two parcels of land",
+        "C": "A road",
+        "D": "A large stone",
+        "Correct": "B",
+        "Rationale": "A boundary is a legal concept; a fence is merely physical evidence of where it might be.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Boundary Line Agreement' is legally valid only if which of the following conditions is met?",
+        "A": "The neighbors are friends",
+        "B": "The boundary is already well-known",
+        "C": "There is a genuine uncertainty or dispute regarding the line",
+        "D": "One neighbor pays the other",
+        "Correct": "C",
+        "Rationale": "Agreements require a 'bone fide' dispute or uncertainty to be binding.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Cadastral Survey' is primarily concerned with:",
+        "A": "Mapping the stars",
+        "B": "Property boundaries and land ownership",
+        "C": "Soil types",
+        "D": "Bridge design",
+        "Correct": "B",
+        "Rationale": "Cadastral refers to the public record of the extent value and ownership of land.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Meander Line' is used to:",
+        "A": "Mark the property boundary",
+        "B": "Approximate the shoreline for area calculation",
+        "C": "Find a lost section corner",
+        "D": "Build a bridge",
+        "Correct": "B",
+        "Rationale": "The actual boundary is usually the water itself not the meander line.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Encroachment' is a:",
+        "A": "Legal right to cross land",
+        "B": "Physical object (like a building) that crosses a property line",
+        "C": "Type of deed",
+        "D": "Government tax",
+        "Correct": "B",
+        "Rationale": "Surveyors identify encroachments to warn clients of potential legal issues.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "In the PLSS a 'Section' is nominally:",
+        "A": "100 acres",
+        "B": "640 acres",
+        "C": "1000 acres",
+        "D": "1 acre",
+        "Correct": "B",
+        "Rationale": "A section is 1 mile by 1 mile.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Easement in Gross' benefits:",
+        "A": "The land",
+        "B": "A specific person or company (like a utility)",
+        "C": "The surveyor",
+        "D": "The government",
+        "Correct": "B",
+        "Rationale": "It does not 'run with the land' but stays with the holder.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Senior Deed' has priority over a 'Junior Deed' because:",
+        "A": "It is larger",
+        "B": "It was created earlier in time",
+        "C": "It is newer",
+        "D": "It has more signatures",
+        "Correct": "B",
+        "Rationale": "The first conveyance takes what it is granted; the remainder is for the junior.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed Restriction' is a:",
+        "A": "Fence",
+        "B": "Limit on how the land can be used",
+        "C": "Government tax",
+        "D": "Surveyor's error",
+        "Correct": "B",
+        "Rationale": "Restrictions are often found in subdivision covenants.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "The 'Public Land Survey System' (PLSS) was started by:",
+        "A": "Thomas Jefferson",
+        "B": "George Washington",
+        "C": "Abraham Lincoln",
+        "D": "Benjamin Franklin",
+        "Correct": "A",
+        "Rationale": "He was a key proponent of the rectangular survey system.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Quarter Corner' in the PLSS is:",
+        "A": "A corner of a section",
+        "B": "A corner set halfway between section corners",
+        "C": "A coin",
+        "D": "A road",
+        "Correct": "B",
+        "Rationale": "It defines the 160-acre quarter sections.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "The 'Base Line' in the PLSS runs:",
+        "A": "North-South",
+        "B": "East-West",
+        "C": "Diagonal",
+        "D": "Vertical",
+        "Correct": "B",
+        "Rationale": "It is the primary East-West line for a given survey area.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "The 'Principal Meridian' in the PLSS runs:",
+        "A": "North-South",
+        "B": "East-West",
+        "C": "Diagonal",
+        "D": "Vertical",
+        "Correct": "A",
+        "Rationale": "It is the primary North-South line for a given survey area.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Range' in the PLSS is a column of townships running:",
+        "A": "North-South",
+        "B": "East-West",
+        "C": "Diagonal",
+        "D": "Vertical",
+        "Correct": "A",
+        "Rationale": "Ranges are numbered East or West of the Principal Meridian.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Tier' (Township) in the PLSS is a row of townships running:",
+        "A": "North-South",
+        "B": "East-West",
+        "C": "Diagonal",
+        "D": "Vertical",
+        "Correct": "B",
+        "Rationale": "Tiers are numbered North or South of the Base Line.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Section' can be divided into:",
+        "A": "Halves and Quarters",
+        "B": "Circles",
+        "C": "Triangles",
+        "D": "Only one piece",
+        "Correct": "A",
+        "Rationale": "The PLSS allows for easy subdivision into smaller rectangular tracts.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Call for Adjoiner' is often given:",
+        "A": "Higher priority than a bearing",
+        "B": "Lower priority than area",
+        "C": "To identify the neighbor's dog",
+        "D": "Only in cities",
+        "Correct": "A",
+        "Rationale": "Calling for a known boundary of another tract is a high-priority call because it indicates intent to go to that line.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Closing Corner' in the PLSS is used when:",
+        "A": "A survey is finished",
+        "B": "A line intersects a previously established boundary",
+        "C": "A corner is lost",
+        "D": "A new township is created",
+        "Correct": "B",
+        "Rationale": "Closing corners are established where new lines meet \"senior\" lines (standard parallels or township boundaries).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Cloud on Title' is:",
+        "A": "A weather event",
+        "B": "A potential claim that may invalidate a title",
+        "C": "A smoke signal",
+        "D": "A missing corner monument",
+        "Correct": "B",
+        "Rationale": "Clouds must be cleared (usually by a quiet title action or quitclaim deed).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' is effective when it is:",
+        "A": "Signed",
+        "B": "Notarized",
+        "C": "Delivered and Accepted",
+        "D": "Recorded",
+        "Correct": "C",
+        "Rationale": "Delivery and acceptance are the final legal steps for a valid conveyance.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' must be ________ to provide constructive notice.",
+        "A": "Signed",
+        "B": "Notarized",
+        "C": "Recorded",
+        "D": "Written in blue ink",
+        "Correct": "C",
+        "Rationale": "Recording the deed in public records provides \"constructive notice\" to the world of the claim.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed of Trust' is primarily used for:",
+        "A": "Conveying ownership",
+        "B": "Securing a loan",
+        "C": "Granting an easement",
+        "D": "Establishing a trust fund",
+        "Correct": "B",
+        "Rationale": "A Deed of Trust is a security instrument for a mortgage used in many states.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed Restriction' (Covenant) that 'Runs with the Land' means:",
+        "A": "It only applies to the current owner",
+        "B": "It applies to all future owners of the property",
+        "C": "It is only for the surveyor",
+        "D": "It expires when the house is sold",
+        "Correct": "B",
+        "Rationale": "Covenants that 'run with the land' are binding on all subsequent owners.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Deed' that is not 'Recorded' is:",
+        "A": "Void",
+        "B": "Valid between the parties but may not protect against third-party claims",
+        "C": "A crime",
+        "D": "The surveyor's fault",
+        "Correct": "B",
+        "Rationale": "Recording provides 'Constructive Notice' to the rest of the world.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Fee Simple' estate represents:",
+        "A": "A temporary rental",
+        "B": "The most complete form of ownership of real property",
+        "C": "A right of way for a road",
+        "D": "A life estate",
+        "Correct": "B",
+        "Rationale": "Fee simple absolute is the highest interest in land known to the law.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'General Warranty Deed' protects the buyer from:",
+        "A": "Claims arising only during the grantor's ownership",
+        "B": "All claims against the title, regardless of when they arose",
+        "C": "Boundary encroachments only",
+        "D": "Zoning changes",
+        "Correct": "B",
+        "Rationale": "It provides the most comprehensive protection.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Latent Ambiguity' in a deed is one that:",
+        "A": "Is obvious on the face of the document",
+        "B": "Appears only when applying the deed to the ground",
+        "C": "Cannot be corrected",
+        "D": "Relates to spelling errors",
+        "Correct": "B",
+        "Rationale": "Latent ambiguities require outside evidence (testimony/fieldwork) to resolve.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'License' to use land is:",
+        "A": "A permanent right",
+        "B": "A revocable permission for a specific purpose",
+        "C": "A deed",
+        "D": "A mortgage",
+        "Correct": "B",
+        "Rationale": "Unlike an easement, a license can usually be taken away at any time by the owner.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Life Estate' lasts for:",
+        "A": "99 years",
+        "B": "The duration of a person's life",
+        "C": "Until the land is sold",
+        "D": "Forever",
+        "Correct": "B",
+        "Rationale": "The property reverts to another (remainder) after the life tenant dies.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Paralellogram' section in the PLSS is most likely caused by:",
+        "A": "Meridian convergence",
+        "B": "Errors in the original survey",
+        "C": "The earth's rotation",
+        "D": "A very large mountain",
+        "Correct": "B",
+        "Rationale": "While convergence causes narrowing extreme shapes are usually the result of historical survey discrepancies.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Partition' is a legal action to:",
+        "A": "Build a fence",
+        "B": "Divide property among co-owners",
+        "C": "Survey a road",
+        "D": "Combine two lots",
+        "Correct": "B",
+        "Rationale": "Partition can be \"in kind\" (physical division) or \"by sale\" (splitting proceeds).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Prescriptive Easement' is created by:",
+        "A": "A written agreement",
+        "B": "Long-term use without the owner's permission",
+        "C": "A city ordinance",
+        "D": "A mortgage document",
+        "Correct": "B",
+        "Rationale": "Prescription is similar to adverse possession but grants a right of use rather than ownership.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Quitclaim Deed' does which of the following?",
+        "A": "Guarantees the title is clear",
+        "B": "Warrants against all future claims",
+        "C": "Conveys only the interest the grantor currently holds",
+        "D": "Transfers land only to family members",
+        "Correct": "C",
+        "Rationale": "A quitclaim deed makes no warranties about the quality of the title.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Sequential Conveyance' is best described as:",
+        "A": "A subdivision plat",
+        "B": "A deed created at a different time than a neighbor",
+        "C": "A will",
+        "D": "A mortgage",
+        "Correct": "B",
+        "Rationale": "Sequential conveyances involve a junior/senior relationship based on the time of creation.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Title Commitment' is a document that:",
+        "A": "Guarantees a survey is correct",
+        "B": "States the conditions under which a title company will issue insurance",
+        "C": "Is signed by the surveyor",
+        "D": "Is used to calculate area",
+        "Correct": "B",
+        "Rationale": "It lists current ownership, liens, and easements (exceptions).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Warranty Deed' guarantees:",
+        "A": "That the surveyor was correct",
+        "B": "That the grantor has clear title and will defend it",
+        "C": "That the land is fertile",
+        "D": "That no one will ever trespass",
+        "Correct": "B",
+        "Rationale": "Warranty deeds offer the highest level of protection to the buyer.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "A 'Warranty Deed' provides 'Covenants of Title.' Which is NOT standard?",
+        "A": "Covenant of Seisin",
+        "B": "Covenant against encumbrances",
+        "C": "Covenant of quiet enjoyment",
+        "D": "Covenant of high accuracy",
+        "Correct": "D",
+        "Rationale": "Covenants of title are legal guarantees about ownership, not technical precision.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Actual Notice' means:",
+        "A": "The deed is in the courthouse",
+        "B": "The person has direct knowledge of a fact",
+        "C": "The survey is finished",
+        "D": "The owner paid the bill",
+        "Correct": "B",
+        "Rationale": "Actual notice is first-hand knowledge (e.g. seeing a fence).",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Avulsion' is defined as:",
+        "A": "Slow soil buildup",
+        "B": "A sudden change in a channel",
+        "C": "The loss of a corner monument",
+        "D": "A vertical shift",
+        "Correct": "B",
+        "Rationale": "Avulsion is a rapid change that typically does not change the boundary.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Easement Appurtenant' is said to:",
+        "A": "Expire when the owner dies",
+        "B": "Benefit a 'dominant' estate and burden a 'servient' estate",
+        "C": "Be only for personal use",
+        "D": "Be illegal in the PLSS",
+        "Correct": "B",
+        "Rationale": "These easements 'run with the land' and transfer with the title.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An easement created by open and notorious use for a statutory period is:",
+        "A": "Easement by Necessity",
+        "B": "Prescriptive Easement",
+        "C": "Express Easement",
+        "D": "Appurtenant Easement",
+        "Correct": "B",
+        "Rationale": "Prescriptive easements are gained through continuous use without permission.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Easement in Gross' is attached to:",
+        "A": "A specific parcel of land",
+        "B": "A specific person or entity",
+        "C": "The neighbor's property",
+        "D": "The city",
+        "Correct": "B",
+        "Rationale": "Unlike appurtenant easements, these are personal rights and do not run with the land.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Encroachment' is defined as:",
+        "A": "A legal right to use land",
+        "B": "A trespass by a physical structure over a property line",
+        "C": "A shared driveway",
+        "D": "A type of water boundary",
+        "Correct": "B",
+        "Rationale": "Encroachments are physical objects that cross a boundary.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Color of Title' refers to:",
+        "A": "A map's legend",
+        "B": "A document that appears to convey title but is legally defective",
+        "C": "The paint on a monument",
+        "D": "A soil type",
+        "Correct": "B",
+        "Rationale": "Color of title is often required for shortened adverse possession.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "Does a 'Meander Line' generally fix the property boundary?",
+        "A": "Yes always",
+        "B": "No the water body is usually the boundary",
+        "C": "Only in Texas",
+        "D": "Only for lakes",
+        "Correct": "B",
+        "Rationale": "Meander lines are for area calculation; the boundary moves with the water.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Eminent Domain' is the power of the government to:",
+        "A": "Collect property taxes",
+        "B": "Take private land for public use with compensation",
+        "C": "Arrest trespassers",
+        "D": "Change zoning laws",
+        "Correct": "B",
+        "Rationale": "This power is limited by the 5th Amendment.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Equitable Estoppel' can be used to:",
+        "A": "Stop a neighbor from building a fence",
+        "B": "Prevent a person from asserting a right due to their past actions",
+        "C": "Calculate a boundary bearing",
+        "D": "Force a sale of land",
+        "Correct": "B",
+        "Rationale": "Estoppel prevents someone from speaking against their previous representations.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "'Fee Simple Absolute' is:",
+        "A": "A survey fee",
+        "B": "The highest form of property ownership",
+        "C": "A type of easement",
+        "D": "A rental agreement",
+        "Correct": "B",
+        "Rationale": "It represents complete ownership with no restrictions.",
+        "Category": "Legal Principles"
+    },
+    {
+        "Question": "An 'Elevation Certificate' is requested for a house built on high ground",
+        "A": " but the house is clearly outside the SFHA. Should you still perform it?\"",
+        "B": "No because it is not required",
+        "C": "Yes if the client or lender requests it for insurance rating or peace of mind",
+        "D": "Only if the city demands it",
+        "Correct": "B",
+        "Rationale": "Yes if the client or lender requests it for insurance rating or peace of mind",
+        "Category": "Lenders or owners may request an EC even in Zone X to prove the structure is safe or to lower premiums.[cite: 1]"
+    },
+    {
+        "Question": "In a 'Condominium Plat', what is being defined?",
+        "A": "Land boundaries",
+        "B": "3D space of units and common areas",
+        "C": "Tenant names",
+        "D": "Price",
+        "Correct": "B",
+        "Rationale": "Condo surveys involve vertical and horizontal dimensions of interior spaces.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In a subdivision, what is a 'Dedication'?",
+        "A": "Poem",
+        "B": "Donation of land for public use",
+        "C": "Setting first corner",
+        "D": "Selling to relative",
+        "Correct": "B",
+        "Rationale": "Plats include statements of dedication for public rights-of-way.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In GIS, 'Metadata' is:",
+        "A": "Mapping data",
+        "B": "Information that describes the data",
+        "C": "Coordinates",
+        "D": "Software",
+        "Correct": "B",
+        "Rationale": "Includes details on source accuracy and projection.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In GIS, what is 'Metadata'?",
+        "A": "Primary data",
+        "B": "Data about the data",
+        "C": "Database",
+        "D": "Map legend",
+        "Correct": "B",
+        "Rationale": "Provides context on source accuracy date and lineage.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In hydrographic surveying, what does 'Sounding' refer to?",
+        "A": "Noise",
+        "B": "Measuring depth",
+        "C": "Calling numbers",
+        "D": "Treasure",
+        "Correct": "B",
+        "Rationale": "Soundings are the primary data points in hydro surveys.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In photogrammetry, 'End Lap' is overlap between:",
+        "A": "Adjacent lines",
+        "B": "Successive photos in same line",
+        "C": "Photo and ground",
+        "D": "Lens and sensor",
+        "Correct": "B",
+        "Rationale": "Required for stereoscopic viewing and 3D modeling.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In photogrammetry, what are 'GCPs'?",
+        "A": "Fuel points",
+        "B": "Known ground coordinates used to orient images",
+        "C": "Lens settings",
+        "D": "Plane shadow",
+        "Correct": "B",
+        "Rationale": "GCPs tie imagery to real-world coordinate systems.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is a 'Contour'?",
+        "A": "Constant bearing",
+        "B": "Line connecting equal elevation",
+        "C": "Boundary",
+        "D": "Fence",
+        "Correct": "B",
+        "Rationale": "Represents 3D shape on 2D map.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is a 'Topographic Survey'?",
+        "A": "Property lines",
+        "B": "Vertical relief and features",
+        "C": "Pipes",
+        "D": "Mortgage",
+        "Correct": "B",
+        "Rationale": "Maps the ups and downs of the land.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is an 'As-Built' survey?",
+        "A": "Proposed building",
+        "B": "Structure after constructed",
+        "C": "Forest",
+        "D": "Stars",
+        "Correct": "B",
+        "Rationale": "Verifies construction matches design.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Hydrographic Surveying' used for?",
+        "A": "Moisture",
+        "B": "Mapping bottom of water",
+        "C": "Rain",
+        "D": "Mountains",
+        "Correct": "B",
+        "Rationale": "Used for dredging and navigation.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Laser Scanning' (LiDAR) used for?",
+        "A": "Water depth",
+        "B": "High-density 3D data",
+        "C": "Atmospheric pressure",
+        "D": "Satellite health",
+        "Correct": "B",
+        "Rationale": "Uses light pulses to map surfaces.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Orthophotography'?",
+        "A": "Bird photo",
+        "B": "Aerial photo geometrically corrected for scale",
+        "C": "Blurry photo",
+        "D": "Cell phone",
+        "Correct": "B",
+        "Rationale": "Can be used like a map.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Photogrammetry'?",
+        "A": "Surveyor pictures",
+        "B": "Measurements from photographs",
+        "C": "Soil analysis",
+        "D": "Film",
+        "Correct": "B",
+        "Rationale": "Large-scale topographic mapping.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Stationing' in route surveys?",
+        "A": "Train station",
+        "B": "Measurement along centerline",
+        "C": "Parking",
+        "D": "Setup",
+        "Correct": "B",
+        "Rationale": "Stations are typically 100 feet apart.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A client wants to subdivide a parcel into two lots. Zoning requires a 25-foot side yard setback. What should you show on the preliminary plat?\"",
+        "A": "The building footprint only",
+        "B": "The zoning setback lines (building envelope)",
+        "C": "The neighbor's house location",
+        "D": "The price of the lots",
+        "Correct": "B",
+        "Rationale": "Surveyors must apply local zoning regulations to show the developable area of a proposed lot.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Condominium Plat' differs from a standard subdivision because it:\"",
+        "A": "Shows 3D space and unit ownership",
+        "B": "Only shows the land",
+        "C": "Does not need a surveyor",
+        "D": "Is not recorded",
+        "Correct": "A",
+        "Rationale": "Condos involve ownership of 'air space' as well as horizontal limits.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Course' in a metes and bounds description consists of:\"",
+        "A": "A distance only",
+        "B": "A bearing and a distance",
+        "C": "A stone and a tree",
+        "D": "A page and a volume",
+        "Correct": "B",
+        "Rationale": "A course describes one segment of the perimeter (e.g., 'North 45 East, 100 feet'). [cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Hydrographic Survey' maps:\"",
+        "A": "The clouds",
+        "B": "Underwater features",
+        "C": "Underground utilities",
+        "D": "Highways",
+        "Correct": "B",
+        "Rationale": "Hydro surveys are used for navigation and volume calcs in water.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Map' is a:\"",
+        "A": "Perfect representation of reality",
+        "B": "Graphic representation of a portion of the earth's surface to scale",
+        "C": "A legal deed",
+        "D": "A list of names",
+        "Correct": "B",
+        "Rationale": "Maps are models that use scale and projection to show spatial relationships.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Mining Survey' is unique because it often involves:\"",
+        "A": "Underwater work",
+        "B": "Underground 3D measurements and safety issues",
+        "C": "Space satellites",
+        "D": "Farm crops",
+        "Correct": "B",
+        "Rationale": "Mining surveys track tunnels and volumes underground.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Point of Beginning' (POB) is essential in:\"",
+        "A": "PLSS descriptions",
+        "B": "Metes and bounds descriptions",
+        "C": "Lot and block descriptions",
+        "D": "GPS logs",
+        "Correct": "B",
+        "Rationale": "A metes and bounds description must start at a POB and \"close\" back to it. [cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Right-of-Way' survey maps:\"",
+        "A": "Land owned by the government for transportation/utilities",
+        "B": "Private backyards",
+        "C": "Underwater caves",
+        "D": "Satellite orbits",
+        "Correct": "A",
+        "Rationale": "ROW surveys define corridors for public use.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Route Survey' is typically used for:\"",
+        "A": "Subdivisions",
+        "B": "Roads and pipelines",
+        "C": "Single-family lots",
+        "D": "Mining",
+        "Correct": "B",
+        "Rationale": "Route surveys follow a linear path.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Subdivision Plat' becomes 'Record' when:\"",
+        "A": "The surveyor signs it",
+        "B": "The client pays for it",
+        "C": "It is officially accepted and recorded by the County/City",
+        "D": "The crew finishes the field work",
+        "Correct": "C",
+        "Rationale": "Recording provides constructive notice to the public and legally creates the new lots.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Topographic Survey' is primarily concerned with:\"",
+        "A": "Legal property boundaries",
+        "B": "The physical features and elevations of the land",
+        "C": "The history of the previous owners",
+        "D": "The depth of the water table",
+        "Correct": "B",
+        "Rationale": "Topographic surveys map natural and man-made features and contours.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Variance' is a request to:\"",
+        "A": "Change a property line",
+        "B": "Depart from a literal enforcement of zoning",
+        "C": "Stop a survey",
+        "D": "Lower taxes",
+        "Correct": "B",
+        "Rationale": "Variances are granted for unique hardships that make zoning compliance impossible.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "Bathymetry' is another term for:\"",
+        "A": "Elevation of the moon",
+        "B": "Water depth measurement",
+        "C": "Temperature of soil",
+        "D": "Wind speed",
+        "Correct": "B",
+        "Rationale": "Bathymetric surveys map underwater topography.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "Contours' on a map connect points of:\"",
+        "A": "Equal distance",
+        "B": "Equal elevation",
+        "C": "Equal property value",
+        "D": "Equal soil type",
+        "Correct": "B",
+        "Rationale": "Contour lines show the shape of the terrain.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "GCP' in aerial mapping stands for:\"",
+        "A": "General City Plan",
+        "B": "Ground Control Point",
+        "C": "Global Core Position",
+        "D": "Grid Coordinate Point",
+        "Correct": "B",
+        "Rationale": "GCPs tie aerial imagery to the ground coordinate system.[cite: 1]",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In a 'Metes and Bounds' description, 'Metes' refers to:",
+        "A": "Monuments",
+        "B": "Measurements (bearings/distances)",
+        "C": "Names of neighbors",
+        "D": "Area",
+        "Correct": "B",
+        "Rationale": "Metes are measurements; Bounds are the boundaries or adjoiners.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "The 'Basis of Bearing' on a plat tells the user:",
+        "A": "The magnetic declination",
+        "B": "The orientation of the survey (e.g. Geodetic or Grid)",
+        "C": "The date of the survey",
+        "D": "The surveyor's name",
+        "Correct": "B",
+        "Rationale": "It explains what 'North' the bearings are referenced to.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is 'Metes and Bounds'?",
+        "A": "A type of fence",
+        "B": "A method of describing land by courses and distances",
+        "C": "A math equation",
+        "D": "A government agency",
+        "Correct": "B",
+        "Rationale": "Common in the original 13 colonies and non-PLSS areas.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is the 'Point of Beginning' in a metes and bounds description?",
+        "A": "The center of the town",
+        "B": "The first corner described",
+        "C": "The surveyor's office",
+        "D": "The highest point",
+        "Correct": "B",
+        "Rationale": "The description must 'commence' at a known point and travel to the POB.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In road design a 'PC' stands for:",
+        "A": "Personal Computer",
+        "B": "Point of Curvature",
+        "C": "Public Corner",
+        "D": "Property Center",
+        "Correct": "B",
+        "Rationale": "The PC is the point where a straight line (tangent) meets a curve.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "In road design a 'PT' stands for:",
+        "A": "Physical Therapy",
+        "B": "Point of Tangency",
+        "C": "Property Trace",
+        "D": "Point of Tension",
+        "Correct": "B",
+        "Rationale": "The PT is the point where a curve ends and a straight line (tangent) begins.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Topographic Map' shows:",
+        "A": "Only property lines",
+        "B": "Vertical relief (contours) and physical features",
+        "C": "Only underground pipes",
+        "D": "Satellite orbits",
+        "Correct": "B",
+        "Rationale": "Topographic maps represent the 3D surface of the earth in 2D.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'GIS' (Geographic Information System) is primarily a:",
+        "A": "Handheld GPS",
+        "B": "Database for storing and analyzing spatial data",
+        "C": "Total station",
+        "D": "Type of map",
+        "Correct": "B",
+        "Rationale": "GIS links data (attributes) to locations (geometry).",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Subdivision' is the process of:",
+        "A": "Combining lots",
+        "B": "Dividing one large parcel into smaller lots",
+        "C": "Building a road",
+        "D": "Digging a well",
+        "Correct": "B",
+        "Rationale": "Subdivision is governed by local and state planning laws.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Course' in a deed is:",
+        "A": "A road",
+        "B": "A bearing and distance",
+        "C": "A list of names",
+        "D": "A type of soil",
+        "Correct": "B",
+        "Rationale": "Metes and bounds descriptions are composed of multiple courses.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "What is the 'Scale' of a map?",
+        "A": "The weight of the paper",
+        "B": "The ratio of map distance to ground distance",
+        "C": "The name of the surveyor",
+        "D": "The date",
+        "Correct": "B",
+        "Rationale": "Scale allows for accurate measurements to be taken from a map.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Topographic Map' uses 'Contours' to show:",
+        "A": "Ownership",
+        "B": "Elevation changes",
+        "C": "Traffic",
+        "D": "Rainfall",
+        "Correct": "B",
+        "Rationale": "Contours connect points of equal elevation to show terrain.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "Which of these is a 'Mapping' task?",
+        "A": "Calculating a mortgage",
+        "B": "Creating a digital terrain model (DTM)",
+        "C": "Selling land",
+        "D": "Driving a truck",
+        "Correct": "B",
+        "Rationale": "Mapping involves the representation of spatial data.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A client wants to subdivide a parcel into two lots. Zoning requires a 25-foot side yard setback. What should you show on the preliminary plat?",
+        "A": "The building footprint only",
+        "B": "The zoning setback lines (building envelope)",
+        "C": "The neighbor's house location",
+        "D": "The price of the lots",
+        "Correct": "B",
+        "Rationale": "Surveyors must apply local zoning regulations to show the developable area of a proposed lot.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Condominium Plat' differs from a standard subdivision because it:",
+        "A": "Shows 3D space and unit ownership",
+        "B": "Only shows the land",
+        "C": "Does not need a surveyor",
+        "D": "Is not recorded",
+        "Correct": "A",
+        "Rationale": "Condos involve ownership of 'air space' as well as horizontal limits.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Course' in a metes and bounds description consists of:",
+        "A": "A distance only",
+        "B": "A bearing and a distance",
+        "C": "A stone and a tree",
+        "D": "A page and a volume",
+        "Correct": "B",
+        "Rationale": "A course describes one segment of the perimeter (e.g., 'North 45 East, 100 feet').",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Hydrographic Survey' maps:",
+        "A": "The clouds",
+        "B": "Underwater features",
+        "C": "Underground utilities",
+        "D": "Highways",
+        "Correct": "B",
+        "Rationale": "Hydro surveys are used for navigation and volume calcs in water.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Map' is a:",
+        "A": "Perfect representation of reality",
+        "B": "Graphic representation of a portion of the earth's surface to scale",
+        "C": "A legal deed",
+        "D": "A list of names",
+        "Correct": "B",
+        "Rationale": "Maps are models that use scale and projection to show spatial relationships.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Mining Survey' is unique because it often involves:",
+        "A": "Underwater work",
+        "B": "Underground 3D measurements and safety issues",
+        "C": "Space satellites",
+        "D": "Farm crops",
+        "Correct": "B",
+        "Rationale": "Mining surveys track tunnels and volumes underground.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Point of Beginning' (POB) is essential in:",
+        "A": "PLSS descriptions",
+        "B": "Metes and bounds descriptions",
+        "C": "Lot and block descriptions",
+        "D": "GPS logs",
+        "Correct": "B",
+        "Rationale": "A metes and bounds description must start at a POB and \"close\" back to it.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Right-of-Way' survey maps:",
+        "A": "Land owned by the government for transportation/utilities",
+        "B": "Private backyards",
+        "C": "Underwater caves",
+        "D": "Satellite orbits",
+        "Correct": "A",
+        "Rationale": "ROW surveys define corridors for public use.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Route Survey' is typically used for:",
+        "A": "Subdivisions",
+        "B": "Roads and pipelines",
+        "C": "Single-family lots",
+        "D": "Mining",
+        "Correct": "B",
+        "Rationale": "Route surveys follow a linear path.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Subdivision Plat' becomes 'Record' when:",
+        "A": "The surveyor signs it",
+        "B": "The client pays for it",
+        "C": "It is officially accepted and recorded by the County/City",
+        "D": "The crew finishes the field work",
+        "Correct": "C",
+        "Rationale": "Recording provides constructive notice to the public and legally creates the new lots.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Topographic Survey' is primarily concerned with:",
+        "A": "Legal property boundaries",
+        "B": "The physical features and elevations of the land",
+        "C": "The history of the previous owners",
+        "D": "The depth of the water table",
+        "Correct": "B",
+        "Rationale": "Topographic surveys map natural and man-made features and contours.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "A 'Variance' is a request to:",
+        "A": "Change a property line",
+        "B": "Depart from a literal enforcement of zoning",
+        "C": "Stop a survey",
+        "D": "Lower taxes",
+        "Correct": "B",
+        "Rationale": "Variances are granted for unique hardships that make zoning compliance impossible.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "'Bathymetry' is another term for:",
+        "A": "Elevation of the moon",
+        "B": "Water depth measurement",
+        "C": "Temperature of soil",
+        "D": "Wind speed",
+        "Correct": "B",
+        "Rationale": "Bathymetric surveys map underwater topography.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "'Contours' on a map connect points of:",
+        "A": "Equal distance",
+        "B": "Equal elevation",
+        "C": "Equal property value",
+        "D": "Equal soil type",
+        "Correct": "B",
+        "Rationale": "Contour lines show the shape of the terrain.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "'GCP' in aerial mapping stands for:",
+        "A": "General City Plan",
+        "B": "Ground Control Point",
+        "C": "Global Core Position",
+        "D": "Grid Coordinate Point",
+        "Correct": "B",
+        "Rationale": "GCPs tie aerial imagery to the ground coordinate system.",
+        "Category": "Mapping/Data Characterization"
+    },
+    {
+        "Question": "If a surveyor finds a discrepancy between a deed and a found monument, they should:",
+        "A": "Change the deed",
+        "B": "Destroy the monument",
+        "C": "Report the discrepancy and show both",
+        "D": "Move the monument",
+        "Correct": "C",
+        "Rationale": "The surveyor's role is to report evidence not hide or alter it.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "In a legal dispute, 'Original Notes' are:",
+        "A": "A nuisance",
+        "B": "Best evidence of field work",
+        "C": "Always wrong",
+        "D": "Confidential",
+        "Correct": "B",
+        "Rationale": "Field notes are primary evidence of the survey's execution.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "What is an 'Obliterated Corner' in the PLSS?",
+        "A": "Destroyed",
+        "B": "Position proven by evidence",
+        "C": "Never set",
+        "D": "Wrong place",
+        "Correct": "B",
+        "Rationale": "Restored based on testimony or other evidence.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Retracement Survey'?",
+        "A": "Create lines",
+        "B": "Find footprint of original surveyor",
+        "C": "Change deed",
+        "D": "Increase acreage",
+        "Correct": "B",
+        "Rationale": "Follow the steps of original surveyor.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Retracement Survey'?\"",
+        "A": "Create lines",
+        "B": "Find footprint of original surveyor",
+        "C": "Change deed",
+        "D": "Increase acreage",
+        "Correct": "B",
+        "Rationale": "Follow the steps of original surveyor.[cite: 1]",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "An 'Obliterated Corner' is one where:\"",
+        "A": "The monument is destroyed but its location can be recovered",
+        "B": "The location is completely unknown",
+        "C": "A new monument has been set",
+        "D": "The landowner removed the pin",
+        "Correct": "A",
+        "Rationale": "An obliterated corner can be recovered by reliable evidence (testimony/accessories).[cite: 1]",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "What is a 'Monument' in surveying?",
+        "A": "A statue",
+        "B": "A physical object marking a corner or line",
+        "C": "A very tall building",
+        "D": "A legal law",
+        "Correct": "B",
+        "Rationale": "Monuments are the best evidence of the surveyor's intent.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "Which of the following is an 'Artificial Monument'?",
+        "A": "An Oak Tree",
+        "B": "A 1/2-inch Iron Pipe",
+        "C": "A River",
+        "D": "A Ridge",
+        "Correct": "B",
+        "Rationale": "Artificial monuments are man-made objects set by surveyors.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "Which of the following is a 'Natural Monument'?",
+        "A": "A concrete post",
+        "B": "A 50-foot waterfall",
+        "C": "A wood stake",
+        "D": "A plastic cap",
+        "Correct": "B",
+        "Rationale": "Natural monuments are permanent physical features of the earth.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "If you find a 1920s iron pipe and a 1950s concrete monument for the same corner which do you hold?",
+        "A": "The concrete monument",
+        "B": "The iron pipe (older)",
+        "C": "The average",
+        "D": "Set a new one",
+        "Correct": "B",
+        "Rationale": "In retracement the 'original' or older evidence usually controls.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "If you are surveying in a 'Recording Act' state you should check:",
+        "A": "Only the current deed",
+        "B": "The chain of title at the county records",
+        "C": "The neighbor's house",
+        "D": "The mailbox",
+        "Correct": "B",
+        "Rationale": "Researching the record history is critical for finding senior rights.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "A 'Lost Corner' must be re-established by:",
+        "A": "Testimony",
+        "B": "Proportionate measurement",
+        "C": "Random guessing",
+        "D": "Holding the nearest fence",
+        "Correct": "B",
+        "Rationale": "Proportionality is the mathematical method for restoring lost corners in the PLSS.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "A 'Monument of Abandonment' is:",
+        "A": "A monument that is no longer used",
+        "B": "A monument found in a forest",
+        "C": "A monument that has been destroyed",
+        "D": "There is no such legal term",
+        "Correct": "D",
+        "Rationale": "Monuments can be 'lost' or 'obliterated', but 'abandonment' is not a standard term for a monument.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "A 'Monument of Record' is:",
+        "A": "A monument mentioned in a deed or plat",
+        "B": "A very famous monument",
+        "C": "A monument made of gold",
+        "D": "A monument set by the city",
+        "Correct": "A",
+        "Rationale": "Record monuments are those that have legal standing through documentation.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "An 'Obliterated Corner' is one where:",
+        "A": "The monument is destroyed but its location can be recovered",
+        "B": "The location is completely unknown",
+        "C": "A new monument has been set",
+        "D": "The landowner removed the pin",
+        "Correct": "A",
+        "Rationale": "An obliterated corner can be recovered by reliable evidence (testimony/accessories).",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "Retracing a 19th-century deed, you find a call for a 'large oak tree' (now a stump). A 40-year-old fence is 5 feet away. Best evidence?",
+        "A": "The fence line",
+        "B": "The center of the rotted stump",
+        "C": "The record distance from the previous corner",
+        "D": "A new iron pipe set at record distance",
+        "Correct": "B",
+        "Rationale": "A found natural monument outranks artificial monuments or measurements.",
+        "Category": "Research/Reconnaissance"
+    },
+    {
+        "Question": "In a 'LOMA' application, what is the surveyor proving?",
+        "A": "Flood zone",
+        "B": "Property is above BFE",
+        "C": "Clear title",
+        "D": "Tax value",
+        "Correct": "B",
+        "Rationale": "A LOMA can remove mandatory flood insurance requirements.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, Table A Item 11 refers to:",
+        "A": "Zoning",
+        "B": "Underground utilities",
+        "C": "Parking",
+        "D": "Acreage",
+        "Correct": "B",
+        "Rationale": "Requires surveyor to show utilities based on visible evidence and plans.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, Table A Item 4 refers to:",
+        "A": "Zoning",
+        "B": "Land Area (Acreage)",
+        "C": "Underground utilities",
+        "D": "Parking",
+        "Correct": "B",
+        "Rationale": "Request for surveyor to calculate and state the total area.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, which document is required to identify easements?",
+        "A": "Verbal report",
+        "B": "Title commitment or report",
+        "C": "Neighbor survey",
+        "D": "Newspaper",
+        "Correct": "B",
+        "Rationale": "The surveyor must address exceptions listed in the title commitment.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, which item checks 'Flood Zones'?",
+        "A": "Table A Item 11",
+        "B": "Table A Item 3",
+        "C": "Title Commitment",
+        "D": "Zoning Report",
+        "Correct": "B",
+        "Rationale": "Specifically asks for flood zone and map number.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, who determines Table A items?",
+        "A": "Surveyor",
+        "B": "Client",
+        "C": "Title Company",
+        "D": "Both",
+        "Correct": "B",
+        "Rationale": "Items are optional and must be requested by the client.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA survey, who provides 'Schedule B' (easements)?",
+        "A": "Surveyor",
+        "B": "Title Insurance Company (via Client)",
+        "C": "County Surveyor",
+        "D": "NCEES",
+        "Correct": "B",
+        "Rationale": "Surveyor relies on the title report to identify record easements.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In an ALTA/NSPS survey, who is the certification typically addressed to?",
+        "A": "Surveyor's Board",
+        "B": "Client / Buyer / Lender / Title Company",
+        "C": "City Council",
+        "D": "IRS",
+        "Correct": "B",
+        "Rationale": "Informs parties they can rely on the data for the transaction.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What is an 'Elevation Certificate' used for?",
+        "A": "Subdividing",
+        "B": "Flood insurance",
+        "C": "Road design",
+        "D": "Buying car",
+        "Correct": "B",
+        "Rationale": "Documents elevation relative to BFE.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What is 'Relative Positional Precision' (ALTA)?",
+        "A": "Geoid accuracy",
+        "B": "Uncertainty relative to another point",
+        "C": "Total distance",
+        "D": "Instrument height",
+        "Correct": "B",
+        "Rationale": "ALTA specifies 2cm + 50ppm.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What is required vertical accuracy for FEMA EC?",
+        "A": "0.1 foot",
+        "B": "1.0 foot",
+        "C": "0.5 foot",
+        "D": "0.01 foot",
+        "Correct": "A",
+        "Rationale": "Required for flood insurance rating.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What is required vertical accuracy for FEMA EC?\"",
+        "A": "0.1 foot",
+        "B": "1.0 foot",
+        "C": "0.5 foot",
+        "D": "0.01 foot",
+        "Correct": "A",
+        "Rationale": "Required for flood insurance rating.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A 'LOMR' in FEMA terms stands for:\"",
+        "A": "Letter of Map Revision",
+        "B": "Land Office Map Record",
+        "C": "Level of Map Relief",
+        "D": "Limited Observation Map Report",
+        "Correct": "A",
+        "Rationale": "A LOMR officially changes a flood map.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A surveyor is asked to 'certify' a plat. This means:\"",
+        "A": "The surveyor guarantees the title is perfect",
+        "B": "The surveyor states the work was done according to certain standards and is accurate",
+        "C": "The surveyor is buying the land",
+        "D": "The surveyor is acting as a lawyer",
+        "Correct": "B",
+        "Rationale": "Certification is a professional statement of fact not a guarantee of title.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A 'Surveyor's Certificate' on a plat is:\"",
+        "A": "A guarantee of title",
+        "B": "A statement of fact regarding the survey performed",
+        "C": "An insurance policy",
+        "D": "A legal opinion",
+        "Correct": "B",
+        "Rationale": "It certifies the accuracy and compliance of the survey.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "ALTA surveys require identification of 'Evidence of Possession' which means:\"",
+        "A": "Who is living in the house",
+        "B": "Unrecorded signs of occupation like fences or paths",
+        "C": "Who holds the deed",
+        "D": "The tax assessor's record",
+        "Correct": "B",
+        "Rationale": "Encroachments and occupation must be noted.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "An 'Elevation Certificate' is primarily used to:\"",
+        "A": "Show the owner's name",
+        "B": "Determine flood insurance rates and compliance",
+        "C": "Measure the height of a fence",
+        "D": "Set a property corner",
+        "Correct": "B",
+        "Rationale": "Surveyors provide building elevations to FEMA for this purpose.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "FEMA 'Zone X' usually refers to:\"",
+        "A": "Special Flood Hazard Area",
+        "B": "Areas of minimal flood hazard",
+        "C": "Coastal high hazard area",
+        "D": "The floodway",
+        "Correct": "B",
+        "Rationale": "Zone X is outside the 1% and 0.2% annual chance floodplains.[cite: 1]",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What does 'ALTA' stand for in surveying?",
+        "A": "American Land Title Association",
+        "B": "All Land Terrain Assessment",
+        "C": "Associated Land Township Area",
+        "D": "American Legal Technical Association",
+        "Correct": "A",
+        "Rationale": "ALTA sets the national standards for title surveys.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What does 'BFE' stand for on a FEMA map?",
+        "A": "Base Flood Elevation",
+        "B": "Boundary Field Entry",
+        "C": "Below Floor Elevation",
+        "D": "Basic Flood Evidence",
+        "Correct": "A",
+        "Rationale": "The BFE is the computed elevation to which floodwater is anticipated to rise.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "What does 'SFHA' stand for on a FEMA map?",
+        "A": "Standard Flood High Area",
+        "B": "Special Flood Hazard Area",
+        "C": "State Flood Home Act",
+        "D": "Surveyors Federal Home Association",
+        "Correct": "B",
+        "Rationale": "The land area covered by the floodwaters of the base flood.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "Which is NOT one of the six NCEES PS exam categories?",
+        "A": "Legal Principles",
+        "B": "Standards and Specifications",
+        "C": "Mapping/Data Characterization",
+        "D": "Quantum Physics",
+        "Correct": "D",
+        "Rationale": "The user provided the correct 6 categories for this task.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "An 'Elevation Certificate' is requested for a house built on high ground, but the house is clearly outside the SFHA. Should you still perform it?",
+        "A": "No because it is not required",
+        "B": "Yes if the client or lender requests it for insurance rating or peace of mind",
+        "C": "Only if the city demands it",
+        "D": "No because it is a waste of money",
+        "Correct": "B",
+        "Rationale": "Lenders or owners may request an EC even in Zone X to prove the structure is safe or to lower premiums.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A 'LOMR' in FEMA terms stands for:",
+        "A": "Letter of Map Revision",
+        "B": "Land Office Map Record",
+        "C": "Level of Map Relief",
+        "D": "Limited Observation Map Report",
+        "Correct": "A",
+        "Rationale": "A LOMR officially changes a flood map.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A surveyor is asked to 'certify' a plat. This means:",
+        "A": "The surveyor guarantees the title is perfect",
+        "B": "The surveyor states the work was done according to certain standards and is accurate",
+        "C": "The surveyor is buying the land",
+        "D": "The surveyor is acting as a lawyer",
+        "Correct": "B",
+        "Rationale": "Certification is a professional statement of fact not a guarantee of title.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "A 'Surveyor's Certificate' on a plat is:",
+        "A": "A guarantee of title",
+        "B": "A statement of fact regarding the survey performed",
+        "C": "An insurance policy",
+        "D": "A legal opinion",
+        "Correct": "B",
+        "Rationale": "It certifies the accuracy and compliance of the survey.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "ALTA surveys require identification of 'Evidence of Possession' which means:",
+        "A": "Who is living in the house",
+        "B": "Unrecorded signs of occupation like fences or paths",
+        "C": "Who holds the deed",
+        "D": "The tax assessor's record",
+        "Correct": "B",
+        "Rationale": "Encroachments and occupation must be noted.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "An 'Elevation Certificate' is primarily used to:",
+        "A": "Show the owner's name",
+        "B": "Determine flood insurance rates and compliance",
+        "C": "Measure the height of a fence",
+        "D": "Set a property corner",
+        "Correct": "B",
+        "Rationale": "Surveyors provide building elevations to FEMA for this purpose.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "FEMA 'Zone X' usually refers to:",
+        "A": "Special Flood Hazard Area",
+        "B": "Areas of minimal flood hazard",
+        "C": "Coastal high hazard area",
+        "D": "The floodway",
+        "Correct": "B",
+        "Rationale": "Zone X is outside the 1% and 0.2% annual chance floodplains.",
+        "Category": "Standards and Specifications"
+    },
+    {
+        "Question": "In a closed traverse, the 'Linear Closure' is:",
+        "A": "Sum of distances",
+        "B": "Distance between start and end points",
+        "C": "Average of angles",
+        "D": "Total area",
+        "Correct": "B",
+        "Rationale": "Linear closure indicates the consistency of measurements.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In a GNSS survey, 'Ionospheric Delay' is reduced by using:",
+        "A": "Higher antenna",
+        "B": "Dual-frequency (L1/L2) receivers",
+        "C": "Longer observation",
+        "D": "Faster sampling",
+        "Correct": "B",
+        "Rationale": "Receivers compare two signals to calculate and eliminate error.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In a 'Least Squares' adjustment, what is a 'Residual'?",
+        "A": "A mistake",
+        "B": "Difference between measured and adjusted value",
+        "C": "Battery life",
+        "D": "Lost monument",
+        "Correct": "B",
+        "Rationale": "Small residuals indicate a good fit.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In a 'Level Loop', what is the purpose of the 'Closing Error'?",
+        "A": "Tree height",
+        "B": "Check precision and accuracy",
+        "C": "Slope of hill",
+        "D": "Calibrate lens",
+        "Correct": "B",
+        "Rationale": "The error is the difference between starting and ending elevations.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In construction staking, what is an 'Offset'?",
+        "A": "Mistake",
+        "B": "Point set a known distance away",
+        "C": "Hammer",
+        "D": "Total cost",
+        "Correct": "B",
+        "Rationale": "Offsets protect the point from being destroyed during construction.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In GNSS, 'RTK' stands for:",
+        "A": "Real Time Kinetic",
+        "B": "Real Time Kinematic",
+        "C": "Radio Transmission Key",
+        "D": "Remote Terrain Knowledge",
+        "Correct": "B",
+        "Rationale": "Centimeter-level positioning in real-time using carrier-phase.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "In 'Least Squares Adjustment', what is being minimized?",
+        "A": "Total distance",
+        "B": "Sum of the squares of residuals",
+        "C": "Cost",
+        "D": "Time",
+        "Correct": "B",
+        "Rationale": "Standard method for adjusting redundant survey data.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is a 'Total Station'?",
+        "A": "Gas station",
+        "B": "Electronic instrument (angles/distances)",
+        "C": "Computer",
+        "D": "Map",
+        "Correct": "B",
+        "Rationale": "Totals the functions of a theodolite and EDM.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is a 'Zenith Angle'?",
+        "A": "From horizon",
+        "B": "From vertical pointing up",
+        "C": "Horizontal bearing",
+        "D": "Property angle",
+        "Correct": "B",
+        "Rationale": "Zenith is 0 degrees.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Geodesy'?",
+        "A": "Trees",
+        "B": "Science of earth's shape/gravity",
+        "C": "Surveying type",
+        "D": "Maps",
+        "Correct": "B",
+        "Rationale": "Framework for global coordinate systems.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Geoid'?",
+        "A": "Round sphere",
+        "B": "Math model",
+        "C": "Surface of equal gravity potential",
+        "D": "Satellite",
+        "Correct": "C",
+        "Rationale": "Represents mean sea level.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Inverse' in surveying?",
+        "A": "Calc coords from bearing",
+        "B": "Calc bearing/dist from coords",
+        "C": "Temperature",
+        "D": "Upside down telescope",
+        "Correct": "B",
+        "Rationale": "Finding the link between two known points.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Multipath' in GNSS?",
+        "A": "Many curves",
+        "B": "Signals reflecting off objects",
+        "C": "Multiple crews",
+        "D": "Walking swamp",
+        "Correct": "B",
+        "Rationale": "Receiver thinks signal traveled longer.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'NGVD 29'?",
+        "A": "GPS",
+        "B": "Vertical datum (1929)",
+        "C": "Horizontal datum",
+        "D": "Ordinance",
+        "Correct": "B",
+        "Rationale": "Standard vertical reference before NAVD 88.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'PDOP'?",
+        "A": "GPS type",
+        "B": "Position Dilution of Precision",
+        "C": "Ordinance",
+        "D": "Boundary",
+        "Correct": "B",
+        "Rationale": "Lower values indicate better satellite geometry.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Refraction' in surveying?",
+        "A": "Bending of light in atmosphere",
+        "B": "Reflection",
+        "C": "Tape wear",
+        "D": "Legal dispute",
+        "Correct": "A",
+        "Rationale": "Affects vertical angles and distances.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Convergence of Meridians'?",
+        "A": "GPS point",
+        "B": "Narrowing of N-S lines at poles",
+        "C": "Intersection",
+        "D": "Declination",
+        "Correct": "B",
+        "Rationale": "Longitude lines get closer toward poles.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'DOP' in GPS?",
+        "A": "Battery",
+        "B": "Geometric strength of satellite configuration",
+        "C": "Fix time",
+        "D": "Base station distance",
+        "Correct": "B",
+        "Rationale": "Lower values indicate higher precision.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Effect of 'Refraction' on leveled line?",
+        "A": "Object higher",
+        "B": "Object lower",
+        "C": "No effect",
+        "D": "Horizontal drift",
+        "Correct": "A",
+        "Rationale": "Bends line toward earth.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Ellipsoid Height'?",
+        "A": "Elevation above MSL",
+        "B": "Height above math reference surface",
+        "C": "Well depth",
+        "D": "Distance to center of earth",
+        "Correct": "B",
+        "Rationale": "GNSS measurements are height above ellipsoid.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Geoid Undulation'?",
+        "A": "Tides",
+        "B": "Difference between Geoid and Ellipsoid",
+        "C": "Road curve",
+        "D": "Earthquake",
+        "Correct": "B",
+        "Rationale": "Allows conversion to sea-level elevations.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Control Survey'?",
+        "A": "Control client",
+        "B": "Establish accurate framework",
+        "C": "\u00e5\u2030\u00b5\u00e9\u20ac\u00a0",
+        "D": "Pretty pictures",
+        "Correct": "B",
+        "Rationale": "Provides base for all mapping.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the purpose of a 'Peg Test'?",
+        "A": "Battery",
+        "B": "Ensure line of sight is horizontal",
+        "C": "Soil density",
+        "D": "Calibrate GPS",
+        "Correct": "B",
+        "Rationale": "Detects collimation error.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the purpose of 'Slope Staking'?",
+        "A": "Owner name",
+        "B": "Mark limits of cut/fill",
+        "C": "Tree height",
+        "D": "Battery",
+        "Correct": "B",
+        "Rationale": "Defines grading limits.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Scale Factor' in State Plane?",
+        "A": "Ground to sea level",
+        "B": "Grid distance to geodetic distance",
+        "C": "Instrument height",
+        "D": "Battery",
+        "Correct": "B",
+        "Rationale": "Accounts for distortion projecting curved surface.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Control Survey'?\"",
+        "A": "Control client",
+        "B": "Establish accurate framework",
+        "C": "Speed of light",
+        "D": "Pretty pictures",
+        "Correct": "B",
+        "Rationale": "Provides base for all mapping.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the primary purpose of a 'Meander Line'?\"",
+        "A": "Define boundary",
+        "B": "Calculate area",
+        "C": "Set corner",
+        "D": "Establish township",
+        "Correct": "B",
+        "Rationale": "Approximate area of a sinuous bank.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the purpose of a 'Peg Test'?\"",
+        "A": "Battery",
+        "B": "Ensure line of sight is horizontal",
+        "C": "Soil density",
+        "D": "Calibrate GPS",
+        "Correct": "B",
+        "Rationale": "Detects collimation error.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is the purpose of 'Slope Staking'?\"",
+        "A": "Owner name",
+        "B": "Mark limits of cut/fill",
+        "C": "Tree height",
+        "D": "Battery",
+        "Correct": "B",
+        "Rationale": "Defines grading limits.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Scale Factor' in State Plane?\"",
+        "A": "Ground to sea level",
+        "B": "Grid distance to geodetic distance",
+        "C": "Instrument height",
+        "D": "Battery",
+        "Correct": "B",
+        "Rationale": "Accounts for distortion projecting curved surface.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Chain' is divided into how many 'Links'?",
+        "A": "10",
+        "B": "50",
+        "C": "100",
+        "D": "66",
+        "Correct": "C",
+        "Rationale": "Each link is 7.92 inches (0.66 feet); [cite_start]100 links make one 66-foot chain.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Correction Line' in the PLSS is also known as a:\"",
+        "A": "Guide Meridian",
+        "B": "Standard Parallel",
+        "C": "Range Line",
+        "D": "Township Line",
+        "Correct": "B",
+        "Rationale": "Standard Parallels are used every 24 miles to correct for the convergence of meridians.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Deflection Angle' is measured from:\"",
+        "A": "The North",
+        "B": "The extension of the preceding line",
+        "C": "The horizon",
+        "D": "The neighbor's house",
+        "Correct": "B",
+        "Rationale": "Deflection angles are used in route surveying to show changes in direction.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A GNSS 'Multipath' error is caused by:\"",
+        "A": "Atmospheric interference",
+        "B": "Signals reflecting off surfaces",
+        "C": "Satellite clock drift",
+        "D": "Poor PDOP",
+        "Correct": "B",
+        "Rationale": "Multipath occurs when signals bounce off buildings or trees before hitting the antenna.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Level Loop' is closed primarily to detect:\"",
+        "A": "Instrument height",
+        "B": "Systematic and random errors",
+        "C": "The earth's curvature",
+        "D": "Wind speed",
+        "Correct": "B",
+        "Rationale": "Loop closures allow the surveyor to calculate and distribute vertical error.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Level Loop' must begin and end on:\"",
+        "A": "Any point",
+        "B": "Points of known elevation",
+        "C": "The same point only",
+        "D": "A water surface",
+        "Correct": "B",
+        "Rationale": "Closing on a known point (or back to start) allows for error checking.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Prism' is used in surveying to:\"",
+        "A": "Separate light into colors",
+        "B": "Reflect the EDM signal back to the total station",
+        "C": "Measure the temperature",
+        "D": "Mark a corner",
+        "Correct": "B",
+        "Rationale": "Prisms are retroreflectors that ensure the signal returns exactly to the source.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Slope Distance' must be converted to a 'Horizontal Distance' for mapping because:\"",
+        "A": "The map is 2D",
+        "B": "Gravity is vertical",
+        "C": "State plane coordinates are on a horizontal plane",
+        "D": "All of the above",
+        "Correct": "D",
+        "Rationale": "Surveying calculations and maps are based on a horizontal projection.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Solar Observation' can be used to determine:\"",
+        "A": "Elevation",
+        "B": "The True North (Geodetic) Azimuth of a line",
+        "C": "The distance to the sun",
+        "D": "The time of day",
+        "Correct": "B",
+        "Rationale": "Astronomical observations were the traditional way to establish orientation.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A surveyor is asked to stake a 500-foot long retaining wall. What is the best instrument?\"",
+        "A": "A drone",
+        "B": "A high-precision Total Station",
+        "C": "A handheld GPS",
+        "D": "A compass",
+        "Correct": "B",
+        "Rationale": "Total stations provide the angular and linear precision needed for high-accuracy construction.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Total Station' measures which two primary values?\"",
+        "A": "Elevation and pressure",
+        "B": "Horizontal and vertical angles and slope distance",
+        "C": "Color and texture",
+        "D": "Density and moisture",
+        "Correct": "B",
+        "Rationale": "Total stations combine an electronic theodolite with an EDM.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Traverse' is a series of:\"",
+        "A": "Area calculations",
+        "B": "Connected lines of known lengths and directions",
+        "C": "Vertical benchmarks",
+        "D": "GPS base stations",
+        "Correct": "B",
+        "Rationale": "A traverse is a sequence of survey lines used to establish control.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Traverse' that starts and ends at the same known point is a:\"",
+        "A": "Open Traverse",
+        "B": "Closed Loop Traverse",
+        "C": "Random Traverse",
+        "D": "Radial Traverse",
+        "Correct": "B",
+        "Rationale": "Closed loops allow for the calculation of misclosure and error adjustment.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Vertical Curve' in road design is used to:\"",
+        "A": "Make the road look nice",
+        "B": "Provide a smooth transition between two different grades",
+        "C": "Stop cars from speeding",
+        "D": "Drain water to the side",
+        "Correct": "B",
+        "Rationale": "Vertical curves (parabolic) are essential for driver safety and comfort.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Vertical Datum' is:\"",
+        "A": "A line of constant longitude",
+        "B": "A reference surface for elevations",
+        "C": "A type of electronic level",
+        "D": "A measurement of slope",
+        "Correct": "B",
+        "Rationale": "Datums like NAVD88 provide a starting point for elevations.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Zenith Angle' is measured from:\"",
+        "A": "The horizon",
+        "B": "Directly overhead",
+        "C": "Directly below",
+        "D": "The North Star",
+        "Correct": "B",
+        "Rationale": "A zenith angle of 0 is directly up; 90 is the horizon.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Accuracy' is defined as:\"",
+        "A": "The closeness of measurements to each other",
+        "B": "The closeness of a measurement to the true value",
+        "C": "The number of decimal places",
+        "D": "The speed of the measurement",
+        "Correct": "B",
+        "Rationale": "Accuracy is \"nearness to truth\"; Precision is repeatability. [cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Azimuth' is usually measured:\"",
+        "A": "Clockwise from North",
+        "B": "Counter-clockwise from South",
+        "C": "From the nearest property line",
+        "D": "In degrees and links",
+        "Correct": "A",
+        "Rationale": "Azimuths are 0-360 degrees measured clockwise from a meridian.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Closure Error' in a traverse is the:\"",
+        "A": "Distance between the first and last point",
+        "B": "Difference between measured and theoretical end points",
+        "C": "The time taken to finish",
+        "D": "The error in the total area",
+        "Correct": "B",
+        "Rationale": "Closure error indicates the precision of the traverse.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "How many acres are in a 'Quarter-Quarter' section?\"",
+        "A": "10",
+        "B": "40",
+        "C": "160",
+        "D": "640",
+        "Correct": "B",
+        "Rationale": "A quarter-quarter (e.g. NE 1/4 of SE 1/4) is nominally 40 acres.[cite: 1]",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "How many square feet are in one Acre?",
+        "A": "10000",
+        "B": "43560",
+        "C": "5280",
+        "D": "640",
+        "Correct": "B",
+        "Rationale": "Standard unit of area in US land surveying.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "If a surveyor is setting control for a bridge, which method is most accurate for vertical?",
+        "A": "Hand level",
+        "B": "GNSS (GPS)",
+        "C": "Differential Leveling",
+        "D": "Drone",
+        "Correct": "C",
+        "Rationale": "Differential leveling remains the most precise method for vertical control.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "The 'Compass Rule' (Bowditch) is used to:",
+        "A": "Measure wind",
+        "B": "Adjust traverse misclosure",
+        "C": "Find magnetic north",
+        "D": "Calculate area",
+        "Correct": "B",
+        "Rationale": "It distributes error proportional to the length of the lines.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "The 'Distance' between the Ellipsoid and the Geoid is called:",
+        "A": "Elevation",
+        "B": "Geoid Undulation",
+        "C": "Slope",
+        "D": "Latitude",
+        "Correct": "B",
+        "Rationale": "This value is used to convert GPS heights to sea-level elevations.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What does 'EDM' stand for?",
+        "A": "Electronic Distance Measurement",
+        "B": "Every Day Map",
+        "C": "Elevation Datum Mark",
+        "D": "Electronic Directional Manual",
+        "Correct": "A",
+        "Rationale": "The technology used in total stations to measure distances via light/radio.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What does 'GNSS' stand for?",
+        "A": "General North South Survey",
+        "B": "Global Navigation Satellite System",
+        "C": "Geodetic Network System Software",
+        "D": "Ground Node Safety System",
+        "Correct": "B",
+        "Rationale": "The umbrella term for satellite constellations like GPS GLONASS etc.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What does 'NAD83' refer to?",
+        "A": "A vertical datum",
+        "B": "A horizontal datum (coordinate system)",
+        "C": "A type of GPS",
+        "D": "A land act",
+        "Correct": "B",
+        "Rationale": "The North American Datum of 1983 is the standard for North America.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What does 'NAVD88' refer to?",
+        "A": "A horizontal datum",
+        "B": "A vertical datum (elevations)",
+        "C": "A road name",
+        "D": "A state law",
+        "Correct": "B",
+        "Rationale": "The North American Vertical Datum of 1988 is the current standard.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What does 'PPM' stand for in EDM corrections?",
+        "A": "Points Per Mile",
+        "B": "Parts Per Million",
+        "C": "Pressure Per Meter",
+        "D": "Power Per Minute",
+        "Correct": "B",
+        "Rationale": "Used to correct for atmospheric effects on distance measurements.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is a 'Cut Sheet' used for in construction?",
+        "A": "Cutting wood",
+        "B": "Providing grades and offsets to the contractor",
+        "C": "Calculating the fee",
+        "D": "Drawing the final plat",
+        "Correct": "B",
+        "Rationale": "It tells the builder how deep to dig or high to build.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Magnetic Declination'?",
+        "A": "The loss of magnetic power",
+        "B": "The angle between Magnetic North and True North",
+        "C": "A broken compass",
+        "D": "The depth of a magnet",
+        "Correct": "B",
+        "Rationale": "Declination changes over time and location.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "What is 'Orthometric Height'?",
+        "A": "Height above the ellipsoid",
+        "B": "Height above the geoid (elevation)",
+        "C": "Height of a tree",
+        "D": "Distance from the equator",
+        "Correct": "B",
+        "Rationale": "This is what we commonly call 'elevation' or height above sea level.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "When 'Proportioning' in the PLSS which takes precedence?",
+        "A": "Distance",
+        "B": "Bearing",
+        "C": "Both share equally",
+        "D": "Area",
+        "Correct": "A",
+        "Rationale": "The PLSS manual prioritizes distance over bearing in restoration.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Which error is 'Systematic'?",
+        "A": "A one-time mistake (blunder)",
+        "B": "A worn tape that is always 0.01 ft too short",
+        "C": "A random gust of wind",
+        "D": "A loose tripod",
+        "Correct": "B",
+        "Rationale": "Systematic errors follow physical laws and can be modeled/corrected.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "Why do we use 'State Plane Coordinates'?",
+        "A": "To keep things secret",
+        "B": "To project the curved earth onto a flat plane for easier calculation",
+        "C": "To save paper",
+        "D": "To use GPS",
+        "Correct": "B",
+        "Rationale": "It allows surveyors to use plane trigonometry over large areas.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Standard Parallel' is located every ____ miles in the PLSS.",
+        "A": "6",
+        "B": "12",
+        "C": "24",
+        "D": "36",
+        "Correct": "C",
+        "Rationale": "Standard Parallels (Correction Lines) are set every 24 miles North/South.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Guide Meridian' is located every ____ miles in the PLSS.",
+        "A": "6",
+        "B": "12",
+        "C": "24",
+        "D": "36",
+        "Correct": "C",
+        "Rationale": "Guide Meridians are set every 24 miles East/West.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "The 'Closing Error' of a traverse is usually expressed as:",
+        "A": "A ratio (e.g. 1:10000)",
+        "B": "A color",
+        "C": "A name",
+        "D": "A time",
+        "Correct": "A",
+        "Rationale": "Precision is defined by the error relative to the distance measured.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Baseline' in a GNSS survey is:",
+        "A": "The road next to the site",
+        "B": "The vector between two receivers observing the same satellites simultaneously",
+        "C": "The starting coordinate",
+        "D": "The battery level",
+        "Correct": "B",
+        "Rationale": "Baselines are the building blocks of a GNSS control network.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Bearing' is always between:",
+        "A": "0 and 360 degrees",
+        "B": "0 and 90 degrees",
+        "C": "0 and 180 degrees",
+        "D": "10 and 20 degrees",
+        "Correct": "B",
+        "Rationale": "Bearings are expressed in quadrants (e.g. N 45 E) relative to North or South.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Benchmark' is a point of known:",
+        "A": "Latitude",
+        "B": "Longitude",
+        "C": "Elevation",
+        "D": "Bearing",
+        "Correct": "C",
+        "Rationale": "Benchmarks are used for vertical control.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Benchmark' is a:",
+        "A": "Property corner",
+        "B": "Point of known elevation",
+        "C": "A line of bearing",
+        "D": "A large tree",
+        "Correct": "B",
+        "Rationale": "Benchmarks are the vertical control points for leveling.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A GNSS survey that uses a base station and a rover is called:",
+        "A": "RTK (Real Time Kinematic)",
+        "B": "Total Station",
+        "C": "Tape measure",
+        "D": "Theodolite",
+        "Correct": "A",
+        "Rationale": "RTK provides high-precision coordinates in the field in real-time.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Vertical Angle' is measured in a:",
+        "A": "Horizontal plane",
+        "B": "Vertical plane",
+        "C": "Diagonal plane",
+        "D": "Circle",
+        "Correct": "B",
+        "Rationale": "Vertical angles are used to calculate elevations and horizontal distances.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Plumb Bob' is used to:",
+        "A": "Measure temperature",
+        "B": "Ensure the instrument is directly over a point",
+        "C": "Find water",
+        "D": "Mark a tree",
+        "Correct": "B",
+        "Rationale": "It uses gravity to establish a precise vertical line.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "The 'True North' is also called:",
+        "A": "Magnetic North",
+        "B": "Geodetic North",
+        "C": "Grid North",
+        "D": "South",
+        "Correct": "B",
+        "Rationale": "It is the direction toward the geographic North Pole.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Theodolite' is used to measure:",
+        "A": "Distance",
+        "B": "Angles (horizontal and vertical)",
+        "C": "Temperature",
+        "D": "Weight",
+        "Correct": "B",
+        "Rationale": "It is the predecessor to the modern total station.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Correction Line' in the PLSS is also known as a:",
+        "A": "Guide Meridian",
+        "B": "Standard Parallel",
+        "C": "Range Line",
+        "D": "Township Line",
+        "Correct": "B",
+        "Rationale": "Standard Parallels are used every 24 miles to correct for the convergence of meridians.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Deflection Angle' is measured from:",
+        "A": "The North",
+        "B": "The extension of the preceding line",
+        "C": "The horizon",
+        "D": "The neighbor's house",
+        "Correct": "B",
+        "Rationale": "Deflection angles are used in route surveying to show changes in direction.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A GNSS 'Multipath' error is caused by:",
+        "A": "Atmospheric interference",
+        "B": "Signals reflecting off surfaces",
+        "C": "Satellite clock drift",
+        "D": "Poor PDOP",
+        "Correct": "B",
+        "Rationale": "Multipath occurs when signals bounce off buildings or trees before hitting the antenna.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Level Loop' is closed primarily to detect:",
+        "A": "Instrument height",
+        "B": "Systematic and random errors",
+        "C": "The earth's curvature",
+        "D": "Wind speed",
+        "Correct": "B",
+        "Rationale": "Loop closures allow the surveyor to calculate and distribute vertical error.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Level Loop' must begin and end on:",
+        "A": "Any point",
+        "B": "Points of known elevation",
+        "C": "The same point only",
+        "D": "A water surface",
+        "Correct": "B",
+        "Rationale": "Closing on a known point (or back to start) allows for error checking.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Prism' is used in surveying to:",
+        "A": "Separate light into colors",
+        "B": "Reflect the EDM signal back to the total station",
+        "C": "Measure the temperature",
+        "D": "Mark a corner",
+        "Correct": "B",
+        "Rationale": "Prisms are retroreflectors that ensure the signal returns exactly to the source.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Slope Distance' must be converted to a 'Horizontal Distance' for mapping because:",
+        "A": "The map is 2D",
+        "B": "Gravity is vertical",
+        "C": "State plane coordinates are on a horizontal plane",
+        "D": "All of the above",
+        "Correct": "D",
+        "Rationale": "Surveying calculations and maps are based on a horizontal projection.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Solar Observation' can be used to determine:",
+        "A": "Elevation",
+        "B": "The True North (Geodetic) Azimuth of a line",
+        "C": "The distance to the sun",
+        "D": "The time of day",
+        "Correct": "B",
+        "Rationale": "Astronomical observations were the traditional way to establish orientation.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A surveyor is asked to stake a 500-foot long retaining wall. What is the best instrument?",
+        "A": "A drone",
+        "B": "A high-precision Total Station",
+        "C": "A handheld GPS",
+        "D": "A compass",
+        "Correct": "B",
+        "Rationale": "Total stations provide the angular and linear precision needed for high-accuracy construction.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Total Station' measures which two primary values?",
+        "A": "Elevation and pressure",
+        "B": "Horizontal and vertical angles and slope distance",
+        "C": "Color and texture",
+        "D": "Density and moisture",
+        "Correct": "B",
+        "Rationale": "Total stations combine an electronic theodolite with an EDM.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Traverse' is a series of:",
+        "A": "Area calculations",
+        "B": "Connected lines of known lengths and directions",
+        "C": "Vertical benchmarks",
+        "D": "GPS base stations",
+        "Correct": "B",
+        "Rationale": "A traverse is a sequence of survey lines used to establish control.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Traverse' that starts and ends at the same known point is a:",
+        "A": "Open Traverse",
+        "B": "Closed Loop Traverse",
+        "C": "Random Traverse",
+        "D": "Radial Traverse",
+        "Correct": "B",
+        "Rationale": "Closed loops allow for the calculation of misclosure and error adjustment.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Vertical Curve' in road design is used to:",
+        "A": "Make the road look nice",
+        "B": "Provide a smooth transition between two different grades",
+        "C": "Stop cars from speeding",
+        "D": "Drain water to the side",
+        "Correct": "B",
+        "Rationale": "Vertical curves (parabolic) are essential for driver safety and comfort.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Vertical Datum' is:",
+        "A": "A line of constant longitude",
+        "B": "A reference surface for elevations",
+        "C": "A type of electronic level",
+        "D": "A measurement of slope",
+        "Correct": "B",
+        "Rationale": "Datums like NAVD88 provide a starting point for elevations.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Zenith Angle' is measured from:",
+        "A": "The horizon",
+        "B": "Directly overhead",
+        "C": "Directly below",
+        "D": "The North Star",
+        "Correct": "B",
+        "Rationale": "A zenith angle of 0 is directly up; 90 is the horizon.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "'Accuracy' is defined as:",
+        "A": "The closeness of measurements to each other",
+        "B": "The closeness of a measurement to the true value",
+        "C": "The number of decimal places",
+        "D": "The speed of the measurement",
+        "Correct": "B",
+        "Rationale": "Accuracy is \"nearness to truth\"; Precision is repeatability.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "'Azimuth' is usually measured:",
+        "A": "Clockwise from North",
+        "B": "Counter-clockwise from South",
+        "C": "From the nearest property line",
+        "D": "In degrees and links",
+        "Correct": "A",
+        "Rationale": "Azimuths are 0-360 degrees measured clockwise from a meridian.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "'Closure Error' in a traverse is the:",
+        "A": "Distance between the first and last point",
+        "B": "Difference between measured and theoretical end points",
+        "C": "The time taken to finish",
+        "D": "The error in the total area",
+        "Correct": "B",
+        "Rationale": "Closure error indicates the precision of the traverse.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "'Double Proportion' is used to restore:",
+        "A": "Quarter corners",
+        "B": "Section corners",
+        "C": "Township corners",
+        "D": "Meander corners",
+        "Correct": "B",
+        "Rationale": "Double proportion is used for interior section corners controlling 4 directions.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "How many acres are in a 'Quarter-Quarter' section?",
+        "A": "10",
+        "B": "40",
+        "C": "160",
+        "D": "640",
+        "Correct": "B",
+        "Rationale": "A quarter-quarter (e.g. NE 1/4 of SE 1/4) is nominally 40 acres.",
+        "Category": "Survey Computations/Calculations"
+    },
+    {
+        "Question": "A 'Contract' for survey services should include:",
+        "A": "The scope of work",
+        "B": "fee",
+        "C": "and timeline",
+        "D": "Only the price",
+        "Correct": "D",
+        "Rationale": "Nothing in writing",
+        "Category": "The scope of work fee and timeline"
+    }
+];
+const weights = { "Legal Principles": 12, "Standards and Specifications": 8, "Research/Reconnaissance": 7, "Mapping/Data Characterization": 6, "Survey Computations/Calculations": 10, "Business Practices": 7 };
+
+let state = {
+    view: 'home',
+    quizQuestions: [],
+    currentIndex: 0,
+    userAnswers: {},
+    stats: JSON.parse(localStorage.getItem('ps_stats')) || {}, 
+    incorrectPool: JSON.parse(localStorage.getItem('ps_incorrect_pool')) || [],
+    reported: JSON.parse(localStorage.getItem('ps_reported_pool')) || []
+};
+
+function renderHome() {
+    const hasSaved = localStorage.getItem('ps_current_quiz');
+    document.getElementById('app').innerHTML = `
+        <h1>NCEES PS Exam Prep</h1>
+        <button class="menu-btn" onclick="generateWeightedQuiz()">Start New Quiz</button>
+        <button class="menu-btn" ${!hasSaved ? 'disabled' : ''} style="background:#20c997" onclick="resumeQuiz()">Continue Quiz</button>
+        <button class="menu-btn" style="background:#6c757d" onclick="renderReview()">Review Session (${state.incorrectPool.length} Incorrect)</button>
+        <button class="menu-btn" style="background:var(--warning)" onclick="renderStats()">Performance Stats</button>
+        <div class="footer-row">
+            <button class="footer-btn" onclick="exportReports()">Export Reports (${state.reported.length})</button>
+            <button class="footer-btn" style="background:#dc3545" onclick="clearReports()">Clear Reports</button>
+        </div>
+    `;
+}
+
+function clearReports() {
+    if (state.reported.length === 0) return;
+    if (confirm("Clear reported answer bank?")) {
+        state.reported = [];
+        localStorage.setItem('ps_reported_pool', JSON.stringify([]));
+        renderHome();
+    }
+}
+
+function renderStats() {
+    let catSummary = {};
+    Object.values(state.stats).forEach(s => {
+        if (!catSummary[s.cat]) catSummary[s.cat] = { correct: 0, total: 0 };
+        catSummary[s.cat].correct += s.correct;
+        catSummary[s.cat].total += s.total;
+    });
+    let html = "<h1>Performance Stats</h1>";
+    if (Object.keys(catSummary).length === 0) {
+        html += "<p style='text-align:center; color:#666;'>No stats available yet.</p>";
+    } else {
+        Object.entries(catSummary).forEach(([cat, data]) => {
+            const pct = Math.round((data.correct / data.total) * 100);
+            const colorClass = pct < 50 ? 'rank-red' : pct < 80 ? 'rank-orange' : 'rank-green';
+            html += `<div class="stat-item ${colorClass}" onclick="renderCategoryDetail('${cat}')">
+                <span>${cat}</span>
+                <span>${pct}% (${data.correct}/${data.total})</span>
+            </div>`;
+        });
+    }
+    html += `<button class="menu-btn" style="margin-top:15px" onclick="renderHome()">Back to Home</button>
+             <div class="danger-zone"><button class="menu-btn" style="background:var(--danger); font-size:0.85rem; padding:10px;" onclick="renderResetConfirm()">Reset Progress Stats</button></div>`;
+    document.getElementById('app').innerHTML = html;
+}
+
+function renderResetConfirm() {
+    document.getElementById('app').innerHTML = `
+        <div style="text-align:center; padding:20px;">
+            <h1 style="color:var(--danger)">Reset Stats?</h1>
+            <button class="menu-btn" style="background:var(--danger)" onclick="performReset()">Yes, Reset Progress</button>
+            <button class="menu-btn" style="background:#6c757d" onclick="renderStats()">Cancel</button>
+        </div>
+    `;
+}
+
+function performReset() {
+    state.stats = {};
+    state.incorrectPool = [];
+    localStorage.removeItem('ps_stats');
+    localStorage.removeItem('ps_incorrect_pool');
+    localStorage.removeItem('ps_current_quiz');
+    alert("Progress reset.");
+    renderStats();
+}
+
+function renderCategoryDetail(catName) {
+    const qList = Object.values(state.stats).filter(s => s.cat === catName);
+    let html = `<h3>${catName}</h3>`;
+    qList.forEach((s, idx) => {
+        const pct = Math.round((s.correct / s.total) * 100);
+        const qColorClass = pct < 50 ? 'rank-red' : pct < 80 ? 'rank-orange' : 'rank-green';
+        html += `<div class="card ${qColorClass}" style="cursor:pointer; padding:12px;" onclick="toggleDetail('stat-det-${idx}')">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                <strong>${pct}% Correct</strong>
+                <span>Streak: ${s.streak}/3</span>
+            </div>
+            <p style="font-size:0.85rem; margin:0;">${s.qData.Question.substring(0,80)}...</p>
+            <div id="stat-det-${idx}" style="display:none; border-top:1px solid rgba(0,0,0,0.1); margin-top:8px; padding-top:8px; font-size:0.8rem; color:#333">
+                <strong>Correct:</strong><br>${s.qData[s.qData.Correct]}<br><br>
+                <strong>Rationale:</strong><br>${s.qData.Rationale}<br>
+                <button class="report-btn" onclick="handleStatReport('${s.qData.Question.replace(/'/g, "\'")}', event)">Report Answer</button>
+            </div>
+        </div>`;
+    });
+    html += '<button class="menu-btn" onclick="renderStats()">Back to Stats</button>';
+    document.getElementById('app').innerHTML = html;
+}
+
+function handleStatReport(questionText, event) {
+    event.stopPropagation();
+    const q = fullDatabase.find(item => item.Question === questionText);
+    if (!q) return;
+    const reason = prompt("Describe issue:");
+    if (reason) {
+        state.reported.push({ ...q, reportReason: reason });
+        localStorage.setItem('ps_reported_pool', JSON.stringify(state.reported));
+        renderHome();
+    }
+}
+
+function toggleDetail(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function renderReview() {
+    let html = `<h1>Session Review (${state.incorrectPool.length})</h1>`;
+    state.incorrectPool.forEach((q, idx) => {
+        html += `<div class="card">
+            <span class="cat-tag">${q.Category}</span>
+            <p><strong>Q:</strong> ${q.Question}</p>
+            <p style="color:var(--success)"><strong>Correct:</strong> ${q[q.Correct]}</p>
+            <div class="rationale" style="display:block">
+                <strong>Rationale:</strong> ${q.Rationale}
+                <br><button class="report-btn" onclick="handleSpecificReport('${idx}')">Report Answer</button>
+            </div>
+        </div>`;
+    });
+    html += '<button class="menu-btn" onclick="renderHome()">Back to Home</button>';
+    document.getElementById('app').innerHTML = html;
+}
+
+function handleSpecificReport(reviewIdx) {
+    const q = state.incorrectPool[reviewIdx];
+    const reason = prompt("Issue:");
+    if (reason) {
+        state.reported.push({ ...q, reportReason: reason });
+        localStorage.setItem('ps_reported_pool', JSON.stringify(state.reported));
+        renderReview();
+    }
+}
+
+function generateWeightedQuiz() {
+    state.incorrectPool = [];
+    localStorage.setItem('ps_incorrect_pool', JSON.stringify([]));
+    let newQuiz = [];
+    for (const [cat, count] of Object.entries(weights)) {
+        let catPool = fullDatabase.filter(q => {
+            const s = state.stats[q.Question];
+            return q.Category === cat && (!s || (s.streak || 0) < 3);
+        });
+        if (catPool.length < count) catPool = fullDatabase.filter(q => q.Category === cat);
+        const shuffled = catPool.sort(() => 0.5 - Math.random());
+        newQuiz.push(...shuffled.slice(0, count));
+    }
+    state.quizQuestions = newQuiz.sort(() => 0.5 - Math.random());
+    state.currentIndex = 0;
+    state.userAnswers = {};
+    saveAndRender();
+}
+
+function saveAndRender() {
+    localStorage.setItem('ps_current_quiz', JSON.stringify({
+        quizQuestions: state.quizQuestions,
+        currentIndex: state.currentIndex,
+        userAnswers: state.userAnswers
+    }));
+    renderQuiz();
+}
+
+function renderQuiz() {
+    const q = state.quizQuestions[state.currentIndex];
+    const progress = ((state.currentIndex + 1) / state.quizQuestions.length) * 100;
+    const answered = state.userAnswers[state.currentIndex];
+    document.getElementById('app').innerHTML = `
+        <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+        <div class="card">
+            <span class="cat-tag">${q.Category}</span>
+            <p style="font-weight:bold; font-size:0.75rem; color:#666;">Q ${state.currentIndex + 1}/${state.quizQuestions.length}</p>
+            <p style="font-size:1.05rem; font-weight:500;">${q.Question}</p>
+            ${['A', 'B', 'C', 'D'].map(L => `
+                <button class="option ${getOptionClass(L, q.Correct, answered)}" onclick="handleSelect('${L}')" ${answered ? 'disabled' : ''}>
+                    ${L}: ${q[L]}
+                </button>
+            `).join('')}
+            ${answered ? `<div class="rationale"><strong>Rationale:</strong><br>${q.Rationale}<br><button class="report-btn" onclick="handleReport()">Report Answer</button></div>` : ''}
+        </div>
+        <div class="nav-btns">
+            <button onclick="renderHome()">Home</button>
+            ${answered ? `<button style="background:var(--primary); color:white;" onclick="next()">${state.currentIndex === state.quizQuestions.length - 1 ? 'Finish' : 'Next'}</button>` : ''}
+        </div>
+    `;
+}
+
+function handleSelect(letter) {
+    const q = state.quizQuestions[state.currentIndex];
+    state.userAnswers[state.currentIndex] = letter;
+    if (!state.stats[q.Question]) state.stats[q.Question] = { correct: 0, total: 0, streak: 0, cat: q.Category, qData: q };
+    state.stats[q.Question].total++;
+    if (letter === q.Correct) {
+        state.stats[q.Question].correct++;
+        state.stats[q.Question].streak++;
+    } else {
+        state.stats[q.Question].streak = 0;
+        state.incorrectPool.push(q);
+        localStorage.setItem('ps_incorrect_pool', JSON.stringify(state.incorrectPool));
+    }
+    localStorage.setItem('ps_stats', JSON.stringify(state.stats));
+    saveAndRender();
+}
+
+function getOptionClass(letter, correct, answered) {
+    if (!answered) return '';
+    return letter === correct ? 'correct' : (letter === answered ? 'incorrect' : '');
+}
+function next() {
+    if (state.currentIndex < state.quizQuestions.length - 1) {
+        state.currentIndex++;
+        saveAndRender();
+    } else {
+        localStorage.removeItem('ps_current_quiz');
+        renderHome();
+    }
+}
+function resumeQuiz() {
+    const saved = JSON.parse(localStorage.getItem('ps_current_quiz'));
+    state.quizQuestions = saved.quizQuestions;
+    state.currentIndex = saved.currentIndex;
+    state.userAnswers = saved.userAnswers;
+    renderQuiz();
+}
+function handleReport() {
+    const q = state.quizQuestions[state.currentIndex];
+    const reason = prompt("Describe issue:");
+    if (reason) {
+        state.reported.push({ ...q, reportReason: reason });
+        localStorage.setItem('ps_reported_pool', JSON.stringify(state.reported));
+        renderQuiz();
+    }
+}
+function exportReports() {
+    const blob = new Blob([JSON.stringify(state.reported)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ps_reports.json';
+    a.click();
+}
+renderHome();
+</script>
+</body>
+</html>
